@@ -1,0 +1,114 @@
+/* Import Poppins font */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+/* Global styles */
+body {
+  @apply font-poppins; 
+  @apply bg-[#0a0b0d] text-white; 
+}
+
+
+
+.text-container {
+  white-space: nowrap; /* Prevent text wrapping */
+  padding: 0 50px; /* Space between repeated texts */
+}
+
+
+.custom-min-height {
+   background-image: url(/Rectangle.png);
+   background-position: center;
+   background-size:cover;
+}
+
+.service-bg {
+  background-image: url(/service-bg.png);
+  background-position: center;
+  background-size:cover;
+}
+
+
+.custom-quill .ql-editor {
+  color: black !important; /* Forces the text color to black */
+}
+
+/* For mobile screens - removing the minimum height */
+@media (max-width: 768px) { /* Adjust 768px to your preferred breakpoint */
+  .custom-min-height {
+      min-height: auto; /* Removes the 80vh setting */
+  }
+}
+
+@media (max-width: 768px) {
+ .padding {
+  padding: 1rem;
+ }
+  }
+  
+  @media (min-width: 769px) and (max-width: 1024px) {
+ .padding {
+  padding: 1rem; /* Adjust as needed for tablet-specific padding */
+ }
+  }
+  
+  .slick-prev, .slick-next {
+    display: none !important;
+  }
+  
+  
+  /* Hide the scrollbar but allow scrolling */
+.scrollbar-hidden::-webkit-scrollbar {
+  display: none; /* Hide scrollbar in Webkit browsers (Chrome, Safari, etc.) */
+}
+
+.scrollbar-hidden {
+  -ms-overflow-style: none; /* Hide scrollbar in IE and Edge */
+  scrollbar-width: none; /* Hide scrollbar in Firefox */
+}
+
+/* Hero Section */
+
+.trailsText {
+  font-size: 20px;
+  font-weight: bold;
+  color: white;
+}
+
+
+.custom-h3 {
+  position: relative;
+  display: inline-block;
+  padding-bottom: 10px;
+}
+
+.custom-h3::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: calc(4ch); 
+  height: 2px;
+  background-color: #ffcc00; 
+}
+
+
+
+/* Set default text color to white */
+.ql-editor {
+  color: #000; /* Default text color for editor */
+}
+
+/* Set the link text color to yellow */
+.ql-editor a {
+  color: yellow !important; /* Override any default link color */
+}
+
+/* Optional: Hover effect for links */
+.ql-editor a:hover {
+  color: lightyellow;
+}

@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://instix.io
+
+# Sitemaps
+Sitemap: https://instix.io/sitemap.xml
