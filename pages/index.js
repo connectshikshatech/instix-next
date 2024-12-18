@@ -13,8 +13,8 @@ export async function getServerSideProps() {
   const seoData = {
     title: "InstiX - Your Trading Partner",
     description: "Discover the best trading features and services with InstiX.",
-    ogImage: "https://instix.io/assets/logo-CMhAAnCN.png",
-    twitterImage: "https://instix.io/assets/logo-CMhAAnCN.png",
+    ogImage: "https://instix-next.vercel.app/assets/logo-CMhAAnCN.png",
+    twitterImage: "https://instix-next.vercel.app/assets/logo-CMhAAnCN.png",
   };
 
   return {

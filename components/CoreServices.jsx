@@ -68,6 +68,7 @@ const CoreServices = () => {
                 width={500}
                 height={300}
                 className="w-full h-56 object-cover"
+                 data-aos="zoom-in"
               />
               <div className="p-4">
                 <h2

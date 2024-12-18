@@ -3,7 +3,7 @@ User-agent: *
 Allow: /
 
 # Host
-Host: https://instix.io
+Host: https://instix-next.vercel.app/
 
 # Sitemaps
-Sitemap: https://instix.io/sitemap.xml
+Sitemap: https://instix-next.vercel.app/sitemap.xml
