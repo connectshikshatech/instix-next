@@ -1,4 +1,4 @@
-"use client";
+// "use client";
 
 import React, { useEffect } from "react";
 import AOS from "aos";
@@ -68,7 +68,7 @@ const CoreServices = () => {
                 width={500}
                 height={300}
                 className="w-full h-56 object-cover"
-                 data-aos="zoom-in"
+                data-aos="zoom-in"
               />
               <div className="p-4">
                 <h2
@@ -107,8 +107,8 @@ const CoreServices = () => {
         <Image
           src="/service-bg.png"
           alt="Background"
-          layout="fill"
-          objectFit="cover"
+          fill
+          style={{ objectFit: "cover" }}
         />
         <div className="absolute inset-0 bg-black opacity-50"></div>
       </div>
