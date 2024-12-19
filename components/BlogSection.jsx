@@ -1,9 +1,7 @@
-// "use client";
-
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { ArrowRight } from "lucide-react";
-import AOS from "aos";
-import "aos/dist/aos.css";
+// import AOS from "aos";
+// import "aos/dist/aos.css";
 import DOMPurify from "dompurify";
 import Image from "next/image";
 
@@ -51,14 +49,14 @@ const generateSlug = (title) =>
     .replace(/(^-|-$)+/g, "") || "default-slug";
 
 export default function BlogSection() {
-  useEffect(() => {
-    AOS.init({ duration: 2000, once: false, easing: "ease-out-cubic" });
-  }, []);
+  // useEffect(() => {
+  //   AOS.init({ duration: 2000, once: false, easing: "ease-out-cubic" });
+  // }, []);
 
   const [blogs, setBlogs] = useState([]);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
+  // useEffect(() => {
     fetch("https://blogs.instix.io/api/blog")
       .then((response) => {
         if (!response.ok) throw new Error(`Error: ${response.status}`);
@@ -73,7 +71,7 @@ export default function BlogSection() {
         setError("Failed to load blogs. Showing default posts.");
         setBlogs(blogPosts); // Fallback to dummy data
       });
-  }, []);
+  // }, []);
   const stripHTML = (html) => {
     const tempDiv = document.createElement("div");
     tempDiv.innerHTML = html;
@@ -82,7 +80,7 @@ export default function BlogSection() {
   return (
     <div
       className="bg-black text-white py-12 px-4 sm:px-6 lg:px-8"
-      data-aos="fade-up"
+      // data-aos="fade-up"
     >
       <div className="max-w-7xl mx-auto">
         {/* Header */}
@@ -120,8 +118,8 @@ export default function BlogSection() {
               <div
                 key={index}
                 className="rounded-lg overflow-hidden"
-                data-aos="zoom-in"
-                data-aos-delay={`${index * 100}`}
+                // data-aos="zoom-in"
+                // data-aos-delay={`${index * 100}`}
               >
                 {/* <img
                   src={

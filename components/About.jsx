@@ -87,7 +87,10 @@ const About = () => {
             Where User-Centric Integrity Meets Open Communication to Deliver
             Trust and Results.
           </h3>
-          <p className="text-gray-300 mb-8 text-justify" data-aos="slide-up">
+          <p
+            className="text-gray-300 mb-8 text-justify"
+            // data-aos="slide-up"
+          >
             instiX stands out as a leading OTC platform designed specifically
             for institutional investors and high-net-worth individuals. It
             offers unmatched liquidity with 100+ coins available for trading.
@@ -100,7 +103,11 @@ const About = () => {
             go-to choice for institutions, HNIs, ultra-HNIs across 10+
             countries.
           </p>
-          <a href="/about-Us" className="inline-block" data-aos="zoom-in">
+          <a
+            href="/about-Us"
+            className="inline-block"
+            //  data-aos="zoom-in"
+          >
             <button className="bg-transparent hover:bg-white hover:text-black text-white font-semibold py-3 px-6 border border-white hover:border-transparent rounded-full inline-flex items-center transition duration-300">
               Learn More
               <div className="ml-2 bg-white rounded-full p-1 inline-flex items-center justify-center">
