@@ -1,19 +1,19 @@
 // "use client";
 
-import React, { useEffect } from "react";
-import AOS from "aos";
-import "aos/dist/aos.css";
+import React from "react";
+// import AOS from "aos";
+// import "aos/dist/aos.css";
 import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 
 const About = () => {
-  useEffect(() => {
-    AOS.init({
-      duration: 2000,
-      once: false, // animations only happen once
-      easing: "ease-in-out",
-    });
-  }, []);
+  // useEffect(() => {
+  //   AOS.init({
+  //     duration: 2000,
+  //     once: false, // animations only happen once
+  //     easing: "ease-in-out",
+  //   });
+  // }, []);
 
   return (
     <section className="w-full overflow-hidden mb-12 bg-black py-[5rem]">
@@ -21,7 +21,7 @@ const About = () => {
       <div className="relative flex overflow-x-hidden">
         <div
           className="py-12 animate-marquee whitespace-nowrap"
-          data-aos="fade-left"
+          // data-aos="fade-left"
         >
           {[...Array(5)].map((_, index) => (
             <span key={index} className="text-5xl mx-4">
@@ -33,7 +33,7 @@ const About = () => {
 
         <div
           className="absolute top-0 py-12 animate-marquee2 whitespace-nowrap"
-          data-aos="fade-right"
+          // data-aos="fade-right"
         >
           {[...Array(5)].map((_, index) => (
             <span key={index} className="text-5xl mx-4">
@@ -49,7 +49,7 @@ const About = () => {
         {/* Image Section */}
         <div
           className="w-full md:w-1/2 relative flex items-center justify-center"
-          data-aos="fade-right"
+          // data-aos="fade-right"
         >
           {/* <img
             src="/Frame.png"
@@ -65,7 +65,7 @@ const About = () => {
           />
           <h2
             className="absolute text-4xl md:text-5xl lg:text-6xl font-bold text-center leading-tight"
-            data-aos="zoom-in"
+            // data-aos="zoom-in"
           >
             <span className="text-yellow-400 block">Integrity</span>
             <span className="text-white">Drives Change</span>
@@ -76,13 +76,13 @@ const About = () => {
         <div className="md:w-1/2" data-aos="fade-left">
           <div
             className="inline-block bg-yellow-400/10 text-yellow-400 text-sm font-semibold px-3 py-1 rounded-full mb-4"
-            data-aos="slide-up"
+            // data-aos="slide-up"
           >
             About instiX
           </div>
           <h3
             className="text-2xl md:text-3xl font-bold mb-4 text-white"
-            data-aos="slide-up"
+            // data-aos="slide-up"
           >
             Where User-Centric Integrity Meets Open Communication to Deliver
             Trust and Results.
