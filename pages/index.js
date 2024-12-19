@@ -9,7 +9,6 @@ import Newsletter from "../components/Newsletter";
 import Head from "next/head";
 
 export async function getServerSideProps() {
-  // Fetch data for SEO and page content
   const seoData = {
     title: "InstiX - Your Trading Partner",
     description: "Discover the best trading features and services with InstiX.",
@@ -38,25 +37,12 @@ const HomePage = ({ seoData }) => {
         <meta name="twitter:image" content={seoData.twitterImage} />
       </Head>
       <div className="bg-black text-white min-h-screen flex flex-col justify-center overflow-hidden">
-        {/* Hero Section */}
         <Hero />
-
-        {/* Operational overview Section */}
         <OperationalHighlights />
-
-        {/* instiX About Section */}
         <About />
-
-        {/* CoreServices Section */}
         <CoreServices />
-
-        {/* Tradingfeatures Section */}
         <Tradingfeatures />
-
-        {/* Blog Section */}
         <BlogSection />
-
-        {/* Newsletter Section */}
         <Newsletter />
       </div>
     </>
