@@ -1,96 +1,30 @@
-import React, { useState } from "react";
-// import { motion, useAnimation, useInView } from "framer-motion";
+import React, { useEffect } from "react";
 import { ArrowRight } from "lucide-react";
+import dynamic from "next/dynamic";
+
+// Dynamically import AOS
+const AOS = dynamic(() => import("aos"), { ssr: false });
+
 
 const Hero = () => {
-  // Ref for detecting when the section is in view
-  // const ref = React.useRef(null);
-  // const isInView = useInView(ref, { once: false });
 
-  // Animation controls
-  // const mainControls = useAnimation();
-  // const paragraphControls = useAnimation();
+   useEffect(() => {
+      if (typeof window !== "undefined") {
+        import("aos/dist/aos.css"); // Dynamically import AOS CSS
+        const aos = require("aos");
+        aos.init({
+          duration: 800, // Global duration for animations
+          once: true, // Animations should happen only once
+        });
+      }
+    }, []);
 
-  // Scroll-based animation logic
-  // useEffect(() => {
-  //   if (isInView) {
-  //     mainControls.start("visible");
-  //   } else {
-  //     mainControls.start("hidden");
-  //     paragraphControls.start("hidden");
-  //   }
-  // }, [isInView, mainControls, paragraphControls]);
-
-  // Text animation variants with scroll-based reset
-  const textVariants = {
-    hidden: {
-      opacity: 0,
-      y: 50,
-    },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.8,
-        ease: "easeOut",
-      },
-    },
-  };
-
-  const headingVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.2,
-        onComplete: () => {
-          paragraphControls.start("visible");
-        },
-      },
-    },
-  };
-
-  const wordVariants = {
-    hidden: {
-      opacity: 0,
-      y: 50,
-    },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.5,
-        ease: "easeOut",
-      },
-    },
-  };
-
-  // Parallax effect for background
-  const [scrollY, setScrollY] = useState(0);
-  // useEffect(() => {
-  //   const handleScroll = () => {
-  //     setScrollY(window.scrollY);
-  //   };
-  //   window.addEventListener("scroll", handleScroll);
-  //   return () => {
-  //     window.removeEventListener("scroll", handleScroll);
-  //   };
-  // }, []);
   return (
     <section
-      // ref={ref}
       className="bg-[#0a0b0d] text-white h-screen flex items-center justify-center p-4 relative overflow-hidden"
     >
       {/* Video Background with Overlay */}
-      {/* <motion.div */}
-      <div
-        className="absolute inset-0 z-0"
-        // style={{
-        //   transform: `translateY(${scrollY * 0.3}px)`,
-        //   opacity: 1 - scrollY / 500,
-        // }}
-      >
+      <div className="absolute inset-0 z-0">
         <div className="relative w-full h-full">
           <video
             src="/main-bg-video.mp4"
@@ -105,20 +39,15 @@ const Hero = () => {
       </div>
 
       {/* Content */}
-      {/* <motion.div */}
       <div
         className="flex flex-col items-center justify-center text-center px-4 py-12 relative z-10"
-        // initial="hidden"
-        // animate={mainControls}
-        // variants={textVariants}
       >
         <div className="max-w-[1320px] mx-auto">
-          {/* <motion.h2 */}
+          {/* Heading */}
           <h2
             className="text-4xl md:text-6xl font-bold text-yellow-400 mb-4"
-            // initial="hidden"
-            // animate={mainControls}
-            // variants={headingVariants}
+            data-aos="fade-up" // AOS animation for the heading
+            data-aos-delay="200" // Delay for better effect
           >
             {[
               "Most",
@@ -133,44 +62,34 @@ const Hero = () => {
               word === "\n" ? (
                 <br key="line-break" />
               ) : (
-                // <motion.span
                 <span
                   key={index}
-                  // variants={wordVariants}
-                  // style={{
-                  //   display: "inline-block",
-                  //   marginRight: "0.5rem",
-                  //   transform: `translateY(${scrollY * 0.2}px)`,
-                  // }}
+                  className="inline-block mr-2"
+                  data-aos="fade-up" // Individual word animation
+                  data-aos-delay={200 + index * 100} // Staggered animation
                 >
                   {word}
                 </span>
               )
             )}
           </h2>
-          {/* <motion.p */}
+
+          {/* Paragraph */}
           <p
             className="mb-6 max-w-2xl mx-auto text-white font-light text-base md:text-lg"
-            // initial="hidden"
-            // animate={paragraphControls}
-            // variants={textVariants}
-            // style={{
-            //   transform: `translateY(${scrollY * 0.1}px)`,
-            // }}
+            data-aos="fade-up"
+            data-aos-delay="400"
           >
             instiX is the first regulated OTC Crypto Platform with Best-in class
             Liquidity, Zero Transaction Fees, 24/7 Support, and Instant Deposits
             and Withdrawals
           </p>
-          {/* <motion.div */}
+
+          {/* Buttons */}
           <div
             className="flex justify-center space-x-4"
-            // initial="hidden"
-            // animate={paragraphControls}
-            // variants={textVariants}
-            // style={{
-            //   transform: `translateY(${scrollY * 0.15}px)`,
-            // }}
+            data-aos="fade-up"
+            data-aos-delay="600"
           >
             <a
               href="https://otc.instix.io/onboarding/"
@@ -178,7 +97,7 @@ const Hero = () => {
             >
               <button className="px-6 py-3 bg-yellow-400 text-black hover:bg-white rounded-full font-medium">
                 Get Started
-                <div className="ml-2 bg-white rounded-full p-1 inline-flex items-center justify-center sm:inline-flex ">
+                <div className="ml-2 bg-white rounded-full p-1 inline-flex items-center justify-center sm:inline-flex">
                   <ArrowRight className="h-4 w-4 text-black" />
                 </div>
               </button>

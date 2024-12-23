@@ -1,19 +1,13 @@
-import React from "react";
-// import AOS from "aos";
-// import "aos/dist/aos.css";
+import React, { useEffect } from "react";
+import dynamic from "next/dynamic";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 
-const CoreServices = () => {
-  // useEffect(() => {
-  //   AOS.init({
-  //     duration: 2000,
-  //     once: true, // Trigger animations only once
-  //     offset: 100,
-  //   });
-  // }, []);
+// Dynamically import AOS
+const AOS = dynamic(() => import("aos"), { ssr: false });
 
+const CoreServices = () => {
   const services = [
     {
       title: "instiX RFQ",
@@ -37,11 +31,23 @@ const CoreServices = () => {
     },
   ];
 
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      import("aos/dist/aos.css"); // Dynamically import AOS CSS
+      const aos = require("aos");
+      aos.init({
+        duration: 2000,
+        once: true, // Trigger animations only once
+        offset: 100,
+      });
+    }
+  }, []);
+
   return (
     <div className="bg-black text-white flex flex-col items-center justify-center p-4 relative overflow-hidden">
       <h1
         className="relative z-10 lg:text-4xl text-[2rem] md:text-5xl font-bold text-center mb-8"
-        // data-aos="fade-up"
+        data-aos="fade-up"
       >
         instiX Core Services
       </h1>
@@ -50,8 +56,8 @@ const CoreServices = () => {
           <div
             key={index}
             className="px-2"
-            // data-aos="fade-up"
-            // data-aos-delay={`${index * 200}`}
+            data-aos="fade-up"
+            data-aos-delay={`${index * 200}`}
           >
             <div className="rounded-lg overflow-hidden shadow-lg text-center hover:border-yellow-500 border border-gray-300 p-4">
               {/* <img
@@ -66,25 +72,19 @@ const CoreServices = () => {
                 width={500}
                 height={300}
                 className="w-full h-56 object-cover"
-                // data-aos="zoom-in"
+                data-aos="zoom-in"
               />
               <div className="p-4">
                 <h2
                   className="text-xl text-yellow-500 font-semibold mb-2"
-                  // data-aos="zoom-in"
+                  data-aos="zoom-in"
                 >
                   {service.title}
                 </h2>
-                <p
-                  className="text-gray-400 mb-4 text-sm"
-                  //  data-aos="zoom-in"
-                >
+                <p className="text-gray-400 mb-4 text-sm" data-aos="zoom-in">
                   {service.description}
                 </p>
-                <div
-                  className="flex justify-center"
-                  // data-aos="zoom-in"
-                >
+                <div className="flex justify-center" data-aos="zoom-in">
                   {/* Link for Navigation */}
                   <Link
                     href={service.link}

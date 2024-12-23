@@ -1,15 +1,21 @@
-import React from "react";
-// import AOS from "aos";
-// import "aos/dist/aos.css";
+import React, { useEffect } from "react";
+import dynamic from "next/dynamic";
+
+// Dynamically import AOS
+const AOS = dynamic(() => import("aos"), { ssr: false });
 
 export default function Tradingfeatures() {
-  // useEffect(() => {
-  //   AOS.init({
-  //     duration: 2000,
-  //     once: false,
-  //     easing: "ease-in-out",
-  //   });
-  // }, []);
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      import("aos/dist/aos.css"); // Dynamically import AOS CSS
+      const aos = require("aos");
+      aos.init({
+        duration: 2000,
+        once: true,
+        easing: "ease-in-out",
+      });
+    }
+  }, []);
 
   return (
     <div className="py-[6rem] bg-black text-white p-4 relative overflow-hidden flex items-center justify-center">
@@ -20,8 +26,8 @@ export default function Tradingfeatures() {
       <div className="relative z-10 max-w-7xl mx-auto">
         <div
           className="mb-8 text-center"
-          // data-aos="fade-up"
-          // data-aos-delay="100"
+          data-aos="fade-up"
+          data-aos-delay="100"
         >
           <span className="lg:text-5xl text-[2rem] font-bold">
             What Sets the instiX OTC Platform ahead!!
@@ -32,8 +38,8 @@ export default function Tradingfeatures() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
           <div
             className="padding lg:p-[3rem] lg:col-span-2 lg:row-span-2 bg-gradient-to-br from-zinc-900 to-[#352900] rounded-lg h-[250px] flex flex-col"
-            // data-aos="fade-right"
-            // data-aos-delay="200"
+            data-aos="fade-right"
+            data-aos-delay="200"
           >
             <h2 className="text-[1.2rem] font-semibold text-yellow-500 mb-2">
               Institutional Focus
@@ -47,8 +53,8 @@ export default function Tradingfeatures() {
 
           <div
             className="padding lg:col-span-3 lg:row-span-2 bg-gradient-to-br from-zinc-900 to-[#352900] p-[3rem] rounded-lg h-[250px] flex flex-col"
-            // data-aos="fade-left"
-            // data-aos-delay="300"
+            data-aos="fade-left"
+            data-aos-delay="300"
           >
             <h2 className="text-[1.2rem] font-semibold mb-2 text-yellow-500">
               Seamless Large Trading Volume
@@ -63,8 +69,8 @@ export default function Tradingfeatures() {
 
           <div
             className="padding lg:col-span-3 lg:row-span-3 bg-gradient-to-br from-zinc-900 to-[#352900] p-[3rem] rounded-lg h-[250px] flex flex-col"
-            // data-aos="fade-up"
-            // data-aos-delay="400"
+            data-aos="fade-up"
+            data-aos-delay="400"
           >
             <h2 className="text-[1.2rem] font-semibold text-yellow-500 mb-2">
               User-Centric Support and Security
@@ -78,8 +84,8 @@ export default function Tradingfeatures() {
 
           <div
             className="padding lg:col-span-2 lg:row-span-3 bg-gradient-to-br from-zinc-900 to-[#352900] p-[3rem] rounded-lg h-[250px] flex flex-col"
-            // data-aos="fade-up-left"
-            // data-aos-delay="500"
+            data-aos="fade-up-left"
+            data-aos-delay="500"
           >
             <h2 className="text-[1.2rem] font-semibold text-yellow-500 mb-2 ">
               Optimized Liquidity Solutions

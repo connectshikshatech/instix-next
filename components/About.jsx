@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import dynamic from "next/dynamic";
 import { ArrowRight } from "lucide-react";
 import Image from "next/image";
-import Head from "next/head";
 
 // Dynamically import AOS to ensure it's only loaded on the client
 const AOS = dynamic(() => import("aos"), { ssr: false });
@@ -22,9 +21,6 @@ const About = () => {
 
   return (
     <>
-      <Head>
-        <title>About - instiX</title>
-      </Head>
       <section className="w-full overflow-hidden mb-12 bg-black py-[5rem]">
         {/* Marquee Section */}
         <div className="relative flex overflow-x-hidden">
