@@ -19,8 +19,7 @@ const Hero = () => {
           duration: 800, // Animation duration
           once: true, // Only animate once
         });
-        aos.refresh(); // Trigger AOS refresh immediately after initialization
-        console.log("AOS initialized and refreshed in Hero");
+        aos.refresh();
       });
     }
   }, []);

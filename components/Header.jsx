@@ -1,18 +1,16 @@
-// "use client";
-
 import { useState, useEffect } from "react";
 import { ArrowRight, LogOut, Menu, X, ChevronDown } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import Image from "next/image";
+import Link from "next/link";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isServicesOpen, setIsServicesOpen] = useState(false);
   const [isInsightsOpen, setIsInsightsOpen] = useState(false);
   const [isSticky, setIsSticky] = useState(false);
-  const router = useRouter();
 
-  const { pathname } = router;
+  const pathname = usePathname();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -57,10 +55,11 @@ const Header = () => {
   const insights = [
     { name: "Blogs", path: "/blog" },
     { name: "In the Media", path: "/mediacoverage" },
-    { name: "Contact Us", path: "/contact-us" },
+    { name: "Contact Us", path: "/contactus" },
   ];
 
   const isHomePage = pathname === "/";
+
   return (
     <div className="text-white">
       <header
@@ -76,14 +75,7 @@ const Header = () => {
           <nav className="flex items-center justify-between py-4">
             {/* Logo */}
             <div className="flex items-center">
-              <a href="/">
-                {/* <img
-                  src="/logo.png"
-                  alt="InstiX Logo"
-                  width={180}
-                  height={80}
-                  className="w-[120px] sm:w-[150px] md:w-[180px]"
-                /> */}
+              <Link href="/">
                 <Image
                   src="/logo.png"
                   alt="InstiX Logo"
@@ -91,30 +83,30 @@ const Header = () => {
                   height={80}
                   className="w-[120px] sm:w-[150px] md:w-[180px]"
                 />
-              </a>
+              </Link>
             </div>
 
             {/* Desktop Navigation */}
             <ul className="hidden lg:flex space-x-4 xl:space-x-6">
               <li>
-                <a
-                  href="/about-us"
+                <Link
+                  href="/about"
                   className={`font-light text-sm xl:text-base list-none px-2 py-1 rounded-full leading-6 ${getActiveClass(
-                    "/about-us"
+                    "/about"
                   )}`}
                 >
                   About Us
-                </a>
+                </Link>
               </li>
               <li>
-                <a
+                <Link
                   href="https://otc.instix.io/"
                   className={`font-light text-sm xl:text-base list-none px-2 py-1 rounded-full leading-6 ${getActiveClass(
                     "/otc"
                   )}`}
                 >
                   OTC Trade
-                </a>
+                </Link>
               </li>
               <li className="relative group">
                 <button
@@ -127,13 +119,13 @@ const Header = () => {
                 </button>
                 <div className="invisible group-hover:visible hover:visible opacity-0 group-hover:opacity-100 hover:opacity-100 absolute left-0 mt-2 w-56 bg-white rounded-lg shadow-lg py-2 z-50 transition-all duration-300">
                   {services.map((service) => (
-                    <a
+                    <Link
                       key={service.path}
                       href={service.path}
                       className="block px-4 py-2 text-sm text-gray-800 hover:bg-yellow-100 hover:text-yellow-600"
                     >
                       {service.name}
-                    </a>
+                    </Link>
                   ))}
                 </div>
               </li>
@@ -148,13 +140,13 @@ const Header = () => {
                 </button>
                 <div className="invisible group-hover:visible hover:visible opacity-0 group-hover:opacity-100 hover:opacity-100 absolute left-0 mt-2 w-56 bg-white rounded-lg shadow-lg py-2 z-50 transition-all duration-300">
                   {insights.map((item) => (
-                    <a
+                    <Link
                       key={item.path}
                       href={item.path}
                       className="block px-4 py-2 text-sm text-gray-800 hover:bg-yellow-100 hover:text-yellow-600"
                     >
                       {item.name}
-                    </a>
+                    </Link>
                   ))}
                 </div>
               </li>
@@ -162,14 +154,14 @@ const Header = () => {
 
             {/* Desktop Buttons */}
             <div className="hidden lg:flex items-center space-x-4">
-              <a href="https://otc.instix.io/" className="inline-block">
+              <Link href="https://otc.instix.io/" className="inline-block">
                 <button className="px-3 py-1.5 xl:px-4 xl:py-2 text-xs xl:text-sm font-light hover:bg-white hover:text-black flex items-center border border-white rounded-[30px]">
                   Log in
                   <div className="ml-2 bg-white rounded-full p-1 inline-flex items-center justify-center">
                     <ArrowRight className="h-4 w-4 text-black" />
                   </div>
                 </button>
-              </a>
+              </Link>
               <a href="https://otc.instix.io/onboarding/">
                 <button className="px-3 py-1.5 xl:px-4 xl:py-2 text-xs xl:text-sm font-medium bg-yellow-400 hover:bg-white hover:text-black text-black rounded-full flex items-center">
                   Get Started
@@ -222,20 +214,20 @@ const Header = () => {
           </div>
 
           <div className="flex flex-col items-start space-y-6 sm:space-y-8">
-            <a
+            <Link
               href="/about-us"
               className="text-white text-xl sm:text-2xl font-light hover:text-yellow-400"
               onClick={toggleMenu}
             >
               About Us
-            </a>
-            <a
+            </Link>
+            <Link
               href="https://otc.instix.io/"
               className="text-white text-xl sm:text-2xl font-light hover:text-yellow-400"
               onClick={toggleMenu}
             >
               OTC Trade
-            </a>
+            </Link>
 
             {/* Mobile Services */}
             <div className="w-full">
@@ -253,14 +245,14 @@ const Header = () => {
               {isServicesOpen && (
                 <div className="mt-4 ml-4 space-y-4">
                   {services.map((service) => (
-                    <a
+                    <Link
                       key={service.path}
                       href={service.path}
                       className="block text-white text-lg hover:text-yellow-400"
                       onClick={toggleMenu}
                     >
                       {service.name}
-                    </a>
+                    </Link>
                   ))}
                 </div>
               )}
@@ -282,14 +274,14 @@ const Header = () => {
               {isInsightsOpen && (
                 <div className="mt-4 ml-4 space-y-4">
                   {insights.map((item) => (
-                    <a
+                    <Link
                       key={item.path}
                       href={item.path}
                       className="block text-white text-lg hover:text-yellow-400"
                       onClick={toggleMenu}
                     >
                       {item.name}
-                    </a>
+                    </Link>
                   ))}
                 </div>
               )}
@@ -297,7 +289,7 @@ const Header = () => {
 
             {/* Mobile Buttons */}
             <div className="w-full space-y-4 pt-4 mt-auto">
-              <a
+              <Link
                 href="https://otc.instix.io/"
                 className="block"
                 onClick={toggleMenu}
@@ -308,8 +300,8 @@ const Header = () => {
                     <ArrowRight className="h-4 w-4 text-black" />
                   </div>
                 </button>
-              </a>
-              <a
+              </Link>
+              <Link
                 href="https://otc.instix.io/onboarding/"
                 className="block"
                 onClick={toggleMenu}
@@ -320,7 +312,7 @@ const Header = () => {
                     <ArrowRight className="h-4 w-4 text-black" />
                   </div>
                 </button>
-              </a>
+              </Link>
             </div>
           </div>
         </div>

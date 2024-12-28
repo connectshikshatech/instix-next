@@ -3,6 +3,7 @@ import "../styles.css";
 import "../app.css";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import Head from "next/head";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -16,7 +17,13 @@ const geistMono = Geist_Mono({
 
 function MyApp({ Component, pageProps }) {
   return (
-    <div className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+    <div
+      className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      suppressHydrationWarning
+    >
+      <Head>
+        <link rel="icon" href="/fav.svg" />
+      </Head>
       <Header />
       <Component {...pageProps} />
       <Footer />
