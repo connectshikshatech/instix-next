@@ -173,6 +173,39 @@ const BlogPage = () => {
                 <p>No blogs found matching your search criteria.</p>
               )}
             </div>
+            <div className="grid mb-12 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+              <div className="bg-[#000] rounded-lg overflow-hidden transform hover:scale-105 transition-transform duration-200 flex flex-col">
+                <div className="relative pb-[60%] overflow-hidden">
+                  <img
+                    src="https://images.unsplash.com/photo-1731589802956-b4693dae884b?w=700&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxMHx8fGVufDB8fHx8fA%3D%3D"
+                    alt="Blog Title"
+                    className="absolute top-0 left-0 w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                  />
+                </div>
+                <div className="p-4 flex flex-col flex-grow">
+                  <Link
+                    href="/blog/7676"
+                    className="text-lg md:text-xl font-semibold mb-3 line-clamp-2 hover:text-yellow-500 transition-colors"
+                  >
+                    Dummy Blog Title
+                  </Link>
+                  <p className="text-sm md:text-base text-white mb-3">
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Exercitationem mollitia porro magnam nesciunt fugit odit
+                    necessitatibus modi veniam, facilis quam tempore dolore.
+                    Voluptatum voluptatem laudantium quo assumenda, ipsam
+                    officiis fugiat eveniet consectetur ab odit sed eaque! Id
+                    sint, laudantium veniam officiis maxime voluptatibus nisi
+                    eos necessitatibus.
+                  </p>
+                  <Link href="/blog/7676">
+                    <button className="text-yellow-500 hover:text-yellow-400 transition-colors text-sm md:text-base inline-flex items-center gap-2">
+                      Read More...
+                    </button>
+                  </Link>
+                </div>
+              </div>
+            </div>
 
             {/* Newsletter Section */}
             <div className="bg-[#000] rounded-lg">
