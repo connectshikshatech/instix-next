@@ -129,21 +129,13 @@ export default function BlogSection() {
                 data-aos="zoom-in"
                 data-aos-delay={`${index * 100}`}
               >
-                {/* <img
-                  src={
-                    blog.featuredImage.startsWith("http")
-                      ? blog.featuredImage
-                      : `https://blogs.instix.io/${blog.featuredImage}`
-                  }
-                  alt={blog.title}
-                  className="w-full h-56 object-cover"
-                /> */}
                 <Image
-                  src={
-                    blog.featuredImage.startsWith("http")
-                      ? blog.featuredImage
-                      : `https://blogs.instix.io/${blog.featuredImage}`
-                  }
+                  src={blog.featuredImage}
+                  // src={
+                  //   blog.featuredImage.startsWith("http")
+                  //     ? blog.featuredImage
+                  //     : `https://blogs.instix.io/${blog.featuredImage}`
+                  // }
                   alt={blog.title}
                   width={500}
                   height={300}

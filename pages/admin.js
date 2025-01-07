@@ -1,7 +1,43 @@
-import React from "react";
+import React, { useState, useCallback } from "react";
+import dynamic from "next/dynamic";
 import { Trash2, Upload, ArrowRight } from "lucide-react";
+// dynamic import for ReactQuill
+const ReactQuill = dynamic(() => import("react-quill-new"), {
+  ssr: false,
+});
+import "react-quill-new/dist/quill.snow.css";
 
 const Admin = () => {
+  const [metaDescription, setMetaDescription] = useState("");
+  const [description, setDescription] = useState("");
+  const [title, setTitle] = useState("");
+  const [category, setCategory] = useState("");
+  const [featuredImage, setFeaturedImage] = useState("");
+
+  const handleDrop = useCallback((event) => {
+    event.preventDefault();
+    const file = event.dataTransfer.files[0];
+    if (file) {
+      setFeaturedImage(URL.createObjectURL(file));
+    }
+  }, []);
+
+  const handleDragOver = useCallback((event) => {
+    event.preventDefault();
+  }, []);
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const blogPost = {
+      title,
+      category,
+      description,
+      metaDescription,
+      featuredImage,
+    };
+    console.log(blogPost);
+  };
+
   return (
     <div className="min-h-screen flex flex-col lg:flex-row justify-evenly bg-black py-36 px-4 sm:px-6 lg:px-8">
       {/* Form for Creating a New Blog Post */}
@@ -15,7 +51,7 @@ const Admin = () => {
               Fill in the details to create your new blog post
             </p>
           </div>
-          <form className="space-y-6">
+          <form className="space-y-6" onSubmit={(e) => handleSubmit(e)}>
             {/* Blog Title */}
             <div>
               <label
@@ -29,6 +65,8 @@ const Admin = () => {
                 id="title"
                 className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                 placeholder="Enter your blog title"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
               />
             </div>
             {/* Blog Category */}
@@ -42,6 +80,8 @@ const Admin = () => {
               <select
                 id="category"
                 className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
               >
                 <option value="">Select Category</option>
                 <option value="Crypto Trading">Crypto Trading</option>
@@ -53,38 +93,55 @@ const Admin = () => {
               <label className="block text-sm font-medium text-gray-700">
                 Featured Image
               </label>
-              <div className="mt-1 flex justify-center rounded-lg border-2 border-dashed p-6 border-gray-300">
-                <div className="text-center">
-                  <Upload className="mx-auto h-10 w-10 text-blue-500" />
-                  <p className="mt-2 text-sm text-gray-500">
-                    Drag & drop to upload or click to select
-                  </p>
-                </div>
+              <div
+                className="mt-1 flex justify-center rounded-lg border-2 border-dashed p-6 border-gray-300"
+                onDrop={handleDrop}
+                onDragOver={handleDragOver}
+              >
+                {featuredImage ? (
+                  <img src={featuredImage} alt="Featured" className="h-32" />
+                ) : (
+                  <div className="text-center">
+                    <Upload className="mx-auto h-10 w-10 text-blue-500" />
+                    <p className="mt-2 text-sm text-gray-500">
+                      Drag & drop to upload or click to select
+                    </p>
+                  </div>
+                )}
               </div>
             </div>
             {/* Description */}
-            <div>
+            <div className="h-52">
               <label
                 htmlFor="description"
                 className="block text-sm font-medium text-gray-700"
               >
                 Description
               </label>
-              <div className="border border-gray-300 rounded-md px-3 py-2 h-32">
+              {/* <div className="border border-gray-300 rounded-md px-3 py-2 h-32">
                 Placeholder for Text Editor
-              </div>
+              </div> */}
+              <ReactQuill
+                theme="snow"
+                value={description}
+                onChange={setDescription}
+                className="mt-3 h-32"
+              />
             </div>
             {/* Meta Description */}
-            <div>
+            <div className="h-52">
               <label
                 htmlFor="metaDescription"
                 className="block text-sm font-medium text-gray-700"
               >
                 Meta Description
               </label>
-              <div className="border border-gray-300 rounded-md px-3 py-2 h-32">
-                Placeholder for Meta Description Editor
-              </div>
+              <ReactQuill
+                theme="snow"
+                value={metaDescription}
+                onChange={setMetaDescription}
+                className="mt-3 h-32"
+              />
             </div>
             {/* Submit Button */}
             <div className="flex justify-end">
