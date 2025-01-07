@@ -22,12 +22,13 @@ const login = ({ seoData }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   // Redirect if already logged in
   useEffect(() => {
-    const isLoggedIn = localStorage.getItem("isLoggedIn");
-    if (isLoggedIn) {
+    const token = localStorage.getItem("token");
+    if (token) {
       router.push("/admin"); // Redirect to admin page if already logged in
     }
   }, [router]);
@@ -47,42 +48,35 @@ const login = ({ seoData }) => {
     }
 
     try {
-      const response = await axios.post(
-        "https://blogs.instix.io/api/auth/login",
+      setLoading(true);
+      const res = await axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL}api/admin/login`,
         {
-          email: email,
-          password: password,
+          email,
+          password,
         }
       );
 
-      if (response.status === 200) {
-        localStorage.setItem("isLoggedIn", "true");
+      if (res.data.success) {
         Swal.fire({
           icon: "success",
-          title: "Login Successful!",
-          text: "Redirecting to the Admin Blog Page...",
-          timer: 2000,
-          showConfirmButton: false,
-        }).then(() => {
-          window.location.href = "/admin";
+          title: res.data.message,
+          confirmButtonColor: "#4caf50",
         });
+        if (rememberMe) {
+          localStorage.setItem("token", res.data.token);
+        }
+        router.push("/admin");
       }
     } catch (error) {
-      if (error.response) {
-        // If response is available, show the error message from backend
-        Swal.fire({
-          icon: "error",
-          title: "Login Failed",
-          text: error.response.data.message || "Invalid credentials",
-        });
-      } else {
-        // If no response, network error
-        Swal.fire({
-          icon: "error",
-          title: "Network Error",
-          text: "Unable to reach the server. Please try again later.",
-        });
-      }
+      Swal.fire({
+        icon: "error",
+        title: "An error occurred",
+        text: error.response.data.message,
+        confirmButtonColor: "#d33",
+      });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -112,7 +106,6 @@ const login = ({ seoData }) => {
                   placeholder="Email address"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  required
                   className="w-full text-gray-600 pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 transition duration-300"
                 />
               </div>
@@ -126,7 +119,6 @@ const login = ({ seoData }) => {
                   placeholder="Password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  required
                   className="w-full text-gray-600 pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 transition duration-300"
                 />
               </div>
@@ -153,7 +145,7 @@ const login = ({ seoData }) => {
                 type="submit"
                 className="w-full py-3 bg-yellow-500 text-black rounded-full hover:opacity-90 transition-opacity duration-300 ease-in-out"
               >
-                Log In
+                {loading ? "Loading..." : "Sign In"}
               </button>
             </form>
 

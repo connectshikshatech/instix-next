@@ -7,6 +7,11 @@ const nextConfig = {
         hostname: "blogs.instix.io",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "ik.imagekit.io",
+        pathname: "/**",
+      },
     ],
   },
 };

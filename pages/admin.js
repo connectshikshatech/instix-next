@@ -1,6 +1,9 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import dynamic from "next/dynamic";
 import { Trash2, Upload, ArrowRight } from "lucide-react";
+import axios from "axios";
+import Swal from "sweetalert2";
+import { useRouter } from "next/router";
 // dynamic import for ReactQuill
 const ReactQuill = dynamic(() => import("react-quill-new"), {
   ssr: false,
@@ -12,13 +15,17 @@ const Admin = () => {
   const [description, setDescription] = useState("");
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState("");
-  const [featuredImage, setFeaturedImage] = useState("");
+  const [featuredImage, setFeaturedImage] = useState(null);
+  const [allBlogs, setAllBlogs] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  const router = useRouter();
 
   const handleDrop = useCallback((event) => {
     event.preventDefault();
     const file = event.dataTransfer.files[0];
     if (file) {
-      setFeaturedImage(URL.createObjectURL(file));
+      setFeaturedImage(file);
     }
   }, []);
 
@@ -26,16 +33,118 @@ const Admin = () => {
     event.preventDefault();
   }, []);
 
-  const handleSubmit = (event) => {
+  // Get token from local storage and solve the error is localStorage is not defined
+  let token;
+  if (typeof window !== "undefined") {
+    token = localStorage.getItem("token");
+  }
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    const blogPost = {
-      title,
-      category,
-      description,
-      metaDescription,
-      featuredImage,
+
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("category", category);
+    formData.append("description", description);
+    formData.append("metaDescription", metaDescription);
+    formData.append("image", featuredImage);
+
+    try {
+      setLoading(true);
+      const res = await axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL}api/admin/blog/create`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      if (res.data.success) {
+        setTitle("");
+        setCategory("");
+        setDescription("");
+        setMetaDescription("");
+        setFeaturedImage(null);
+        Swal.fire({
+          icon: "success",
+          title: res.data.message,
+          confirmButtonColor: "#4caf50",
+        });
+
+        setAllBlogs((prevBlogs) => [res.data.data, ...prevBlogs]);
+      }
+    } catch (error) {
+      console.log(error);
+
+      Swal.fire({
+        icon: "error",
+        title: "An error occurred",
+        text: error.response.data.message,
+        confirmButtonColor: "#d33",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    const fetchBlogs = async () => {
+      try {
+        const res = await axios.get(
+          `${process.env.NEXT_PUBLIC_API_URL}api/admin/blog/getAll`
+        );
+
+        if (res.data.success) {
+          setAllBlogs(res.data.data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
     };
-    console.log(blogPost);
+
+    fetchBlogs();
+  }, []);
+
+  const redirectToBlog = (id) => {
+    router.push(`/blog/${id}`);
+  };
+
+  const deleteBlog = async (id) => {
+    try {
+      const res = await axios.delete(
+        `${process.env.NEXT_PUBLIC_API_URL}api/admin/blog/delete/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (res.data.success) {
+        setAllBlogs((prevBlogs) => prevBlogs.filter((blog) => blog._id !== id));
+        Swal.fire({
+          icon: "success",
+          title: res.data.message,
+          confirmButtonColor: "#4caf50",
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      Swal.fire({
+        icon: "error",
+        title: "An error occurred",
+        text: error.response.data.message,
+        confirmButtonColor: "#d33",
+      });
+    }
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    router.push("/");
   };
 
   return (
@@ -99,7 +208,11 @@ const Admin = () => {
                 onDragOver={handleDragOver}
               >
                 {featuredImage ? (
-                  <img src={featuredImage} alt="Featured" className="h-32" />
+                  <img
+                    src={URL.createObjectURL(featuredImage)}
+                    alt="Featured"
+                    className="h-32"
+                  />
                 ) : (
                   <div className="text-center">
                     <Upload className="mx-auto h-10 w-10 text-blue-500" />
@@ -149,7 +262,7 @@ const Admin = () => {
                 type="submit"
                 className="rounded-full bg-yellow-500 px-4 py-2 text-sm font-medium text-black hover:bg-yellow-300 focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2"
               >
-                Publish Post
+                {loading ? "Loading..." : " Publish Post"}
               </button>
             </div>
           </form>
@@ -165,6 +278,7 @@ const Admin = () => {
             </h2>
             <button
               type="button"
+              onClick={handleLogout}
               className="px-3 py-1.5 xl:px-4 xl:py-2 text-xs xl:text-sm font-light hover:bg-white hover:text-black flex items-center border border-white rounded-[30px]"
             >
               Log out
@@ -174,21 +288,29 @@ const Admin = () => {
             </button>
           </div>
           <ul className="space-y-4 overflow-y-auto max-h-[41rem] scrollbar-hidden">
-            <li className="flex items-center justify-between border-b pb-2 last:border-b-0">
-              <div className="flex-grow pr-4">
-                <h3 className="text-[14px] lg:text-lg font-semibold">
-                  Sample Blog Title
-                </h3>
-                <p className="text-[10px] lg:text-sm text-gray-500">
-                  Category: Sample Category
-                </p>
-                <p className="text-sm text-gray-400 mb-2">Sample Description</p>
-              </div>
-              <Trash2
-                className="text-red-500 cursor-pointer hover:text-red-600 transition-colors"
-                size={20}
-              />
-            </li>
+            {allBlogs.map((blog) => (
+              <li
+                key={blog._id}
+                className="flex  items-center justify-between border-b pb-2 last:border-b-0"
+              >
+                <div
+                  onClick={() => redirectToBlog(blog._id)}
+                  className="flex-grow cursor-pointer pr-4"
+                >
+                  <h3 className="text-[14px] lg:text-lg font-semibold">
+                    {blog.title}
+                  </h3>
+                  <p className="text-[10px] lg:text-sm text-gray-500">
+                    Category: {blog.category}
+                  </p>
+                </div>
+                <Trash2
+                  onClick={() => deleteBlog(blog._id)}
+                  className="text-red-500 cursor-pointer hover:text-red-600 transition-colors"
+                  size={20}
+                />
+              </li>
+            ))}
           </ul>
         </div>
       </div>
