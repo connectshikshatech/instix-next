@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 
 // Dynamically import ReactQuill
@@ -11,26 +11,26 @@ const Editor = ({ setDescription, description }) => {
   const [modules, setModules] = useState(null);
 
   useEffect(() => {
-    const Quill = require("react-quill-new").Quill;
+    import("react-quill-new").then((Quill) => {
+      const modules = {
+        toolbar: {
+          container: [
+            [{ header: "1" }, { header: "2" }, { font: [] }],
+            [{ size: [] }],
+            ["bold", "italic", "underline", "strike", "blockquote"],
+            [{ list: "ordered" }, { list: "bullet" }],
+            ["link", "image"],
+            ["clean"],
+            ["code-block"],
+            [{ align: [] }],
+            [{ color: [] }, { background: [] }],
+            ["table"],
+          ],
+        },
+      };
 
-    const modules = {
-      toolbar: {
-        container: [
-          [{ header: "1" }, { header: "2" }, { font: [] }],
-          [{ size: [] }],
-          ["bold", "italic", "underline", "strike", "blockquote"],
-          [{ list: "ordered" }, { list: "bullet" }],
-          ["link", "image"],
-          ["clean"],
-          ["code-block"],
-          [{ align: [] }],
-          [{ color: [] }, { background: [] }],
-          ["table"],
-        ],
-      },
-    };
-
-    setModules(modules);
+      setModules(modules);
+    });
   }, []);
 
   return (
