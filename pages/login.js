@@ -63,9 +63,7 @@ const login = ({ seoData }) => {
           title: res.data.message,
           confirmButtonColor: "#4caf50",
         });
-        if (rememberMe) {
-          localStorage.setItem("token", res.data.token);
-        }
+        localStorage.setItem("token", res.data.token);
         router.push("/admin");
       }
     } catch (error) {

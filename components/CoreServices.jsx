@@ -70,8 +70,8 @@ const CoreServices = () => {
                 src={service.image}
                 alt={service.title}
                 width={500}
-                height={300}
-                className="w-full h-56 object-cover"
+                height={400}
+                className="w-full h-auto object-cover"
                 data-aos="zoom-in"
               />
               <div className="p-4">

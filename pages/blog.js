@@ -1,16 +1,28 @@
 import React, { useState, useEffect } from "react";
 import { Search } from "lucide-react";
-import DOMPurify from "dompurify";
 import axios from "axios";
 import { ThreeDots } from "react-loader-spinner"; // Import the loader
 import Link from "next/link";
 import Newsletter from "@/components/Newsletter";
 
 const BlogPage = () => {
-  const [loading, setLoading] = useState(false); // State for loader
-  const [active, setActive] = useState("Latest Blogs"); // State for active category
-  const [activeBlog, setActiveBlog] = useState("Latest Blogs"); // State for active blog
-  const [allBlogs, setAllBlogs] = useState([]); // State for all blogs
+  const [loading, setLoading] = useState(false);
+  const [active, setActive] = useState("Latest Blogs");
+  const [activeBlog, setActiveBlog] = useState("Latest Blogs");
+  const [allBlogs, setAllBlogs] = useState([]);
+  const [filteredBlogs, setFilteredBlogs] = useState([]);
+
+  const stripHtml = (html) => {
+    if (typeof window === "undefined") return html;
+    const tempDiv = document.createElement("div");
+    tempDiv.innerHTML = html;
+    return tempDiv.textContent || tempDiv.innerText || "";
+  };
+
+  const truncateText = (text, length) => {
+    if (text.length <= length) return text;
+    return text.substring(0, length) + "...";
+  };
 
   useEffect(() => {
     const fetchBlogs = async () => {
@@ -29,6 +41,19 @@ const BlogPage = () => {
 
     fetchBlogs();
   }, []);
+
+  useEffect(() => {
+    if (active === "Latest Blogs") {
+      // show only the latest 6 blogs
+      const latest = allBlogs.slice(0, 5);
+      setFilteredBlogs(latest);
+    } else {
+      const filtered = allBlogs.filter((blog) =>
+        blog.category.includes(active)
+      );
+      setFilteredBlogs(filtered);
+    }
+  }, [active, allBlogs]);
 
   return (
     <div className="min-h-screen bg-[#1a1a1a] pt-24 text-white w-full">
@@ -71,7 +96,7 @@ const BlogPage = () => {
                   (category) => (
                     <p
                       key={category}
-                      onClick={() => setActiveBlog(category)}
+                      onClick={() => setActive(category)}
                       className={`cursor-pointer lg:text-xl text-[13px] hover:border-yellow-500 whitespace-nowrap pb-1 ${
                         active === category
                           ? "text-yellow-500 border-yellow-500 border-b-2 hover:text-gray-300"
@@ -98,8 +123,8 @@ const BlogPage = () => {
             {/* Blog Grid */}
 
             <div className="grid mb-12 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-              {allBlogs && allBlogs.length > 0 ? (
-                allBlogs.map((blog) => (
+              {filteredBlogs && filteredBlogs.length > 0 ? (
+                filteredBlogs.map((blog) => (
                   <div
                     key={blog._id}
                     className="bg-[#000] rounded-lg overflow-hidden transform hover:scale-105 transition-transform duration-200 flex flex-col"
@@ -118,12 +143,12 @@ const BlogPage = () => {
                       >
                         {blog.title}
                       </Link>
-                      <p
-                        dangerouslySetInnerHTML={{
-                          __html: DOMPurify.sanitize(blog.description),
-                        }}
-                        className="text-sm md:text-base text-white mb-3"
-                      />
+                      <p className="text-sm md:text-base text-white mb-3">
+                        {truncateText(
+                          stripHtml(blog ? blog.description : ""),
+                          40
+                        )}
+                      </p>
 
                       <Link href={`/blog/${blog._id}`}>
                         <button className="text-yellow-500 hover:text-yellow-400 transition-colors text-sm md:text-base inline-flex items-center gap-2">
@@ -134,7 +159,7 @@ const BlogPage = () => {
                   </div>
                 ))
               ) : (
-                <div className="text-center text-white">No Blogs Found</div>
+                <div className="text-white">No Blogs Found</div>
               )}
             </div>
 

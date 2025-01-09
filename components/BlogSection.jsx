@@ -47,6 +47,18 @@ const blogPosts = [
 export default function BlogSection() {
   const [allBlogs, setAllBlogs] = useState([]);
 
+  const stripHtml = (html) => {
+    if (typeof window === "undefined") return html;
+    const tempDiv = document.createElement("div");
+    tempDiv.innerHTML = html;
+    return tempDiv.textContent || tempDiv.innerText || "";
+  };
+
+  const truncateText = (text, length) => {
+    if (text.length <= length) return text;
+    return text.substring(0, length) + "...";
+  };
+
   useEffect(() => {
     if (typeof window !== "undefined") {
       import("aos/dist/aos.css"); // Dynamically import CSS
@@ -122,12 +134,9 @@ export default function BlogSection() {
                   <Link href={`/blog/${blog._id || blog.slug}`}>
                     <h3 className="text-lg font-semibold mb-2">{blog.title}</h3>
                   </Link>
-                  <p
-                    dangerouslySetInnerHTML={{
-                      __html: blog ? blog.description : "",
-                    }}
-                    className="text-sm text-white mb-4"
-                  ></p>
+                  <p className="text-sm text-white mb-4">
+                    {truncateText(stripHtml(blog ? blog.description : ""), 40)}
+                  </p>
                   <Link href={`/blog/${blog._id || blog.slug}`}>
                     <button className="text-white border border-white px-4 py-2 rounded-full text-sm flex items-center hover:bg-white hover:text-black transition-colors">
                       View More

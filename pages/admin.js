@@ -4,11 +4,7 @@ import { Trash2, Upload, ArrowRight } from "lucide-react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { useRouter } from "next/router";
-// dynamic import for ReactQuill
-const ReactQuill = dynamic(() => import("react-quill-new"), {
-  ssr: false,
-});
-import "react-quill-new/dist/quill.snow.css";
+import Editor from "@/components/Editor";
 
 const Admin = () => {
   const [metaDescription, setMetaDescription] = useState("");
@@ -18,6 +14,8 @@ const Admin = () => {
   const [featuredImage, setFeaturedImage] = useState(null);
   const [allBlogs, setAllBlogs] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [descriptionImages, setDescriptionImages] = useState([]);
+  const [metaDescriptionImages, setMetaDescriptionImages] = useState([]);
 
   const router = useRouter();
 
@@ -39,6 +37,12 @@ const Admin = () => {
     token = localStorage.getItem("token");
   }
 
+  useEffect(() => {
+    if (!token) {
+      router.push("/login");
+    }
+  }, []);
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -48,7 +52,6 @@ const Admin = () => {
     formData.append("description", description);
     formData.append("metaDescription", metaDescription);
     formData.append("image", featuredImage);
-
     try {
       setLoading(true);
       const res = await axios.post(
@@ -61,6 +64,8 @@ const Admin = () => {
           },
         }
       );
+
+      console.log(res);
 
       if (res.data.success) {
         setTitle("");
@@ -101,7 +106,7 @@ const Admin = () => {
           setAllBlogs(res.data.data);
         }
       } catch (error) {
-        console.log(error);
+        console.error("Error fetching blogs:", error);
       }
     };
 
@@ -151,7 +156,7 @@ const Admin = () => {
     <div className="min-h-screen flex flex-col lg:flex-row justify-evenly bg-black py-36 px-4 sm:px-6 lg:px-8">
       {/* Form for Creating a New Blog Post */}
       <div className="max-w-3xl w-full lg:w-[60%] mx-auto">
-        <div className="bg-white rounded-lg shadow-lg p-6 space-y-6">
+        <div className="bg-white h-auto rounded-lg shadow-lg p-6 space-y-6">
           <div className="border-b pb-4">
             <h1 className="text-2xl font-bold text-gray-900">
               Create New Blog Post
@@ -224,36 +229,32 @@ const Admin = () => {
               </div>
             </div>
             {/* Description */}
-            <div className="h-52">
+            <div className="h-auto">
               <label
                 htmlFor="description"
                 className="block text-sm font-medium text-gray-700"
               >
                 Description
               </label>
-              {/* <div className="border border-gray-300 rounded-md px-3 py-2 h-32">
-                Placeholder for Text Editor
-              </div> */}
-              <ReactQuill
-                theme="snow"
-                value={description}
-                onChange={setDescription}
-                className="mt-3 h-32"
+
+              <Editor
+                setDescription={setDescription}
+                description={description}
+                setDescriptionImages={setDescriptionImages}
               />
             </div>
             {/* Meta Description */}
-            <div className="h-52">
+            <div className="h-auto">
               <label
                 htmlFor="metaDescription"
                 className="block text-sm font-medium text-gray-700"
               >
                 Meta Description
               </label>
-              <ReactQuill
-                theme="snow"
-                value={metaDescription}
-                onChange={setMetaDescription}
-                className="mt-3 h-32"
+              <Editor
+                setDescription={setMetaDescription}
+                description={metaDescription}
+                setDescriptionImages={setMetaDescriptionImages}
               />
             </div>
             {/* Submit Button */}

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Head from "next/head";
 import axios from "axios";
+import Image from "next/image";
 import { useRouter } from "next/router";
 
 export async function getStaticPaths() {
@@ -13,7 +14,7 @@ export async function getStaticPaths() {
     params: { id: blog._id },
   }));
 
-  return { paths, fallback: false };
+  return { paths, fallback: "blocking" };
 }
 
 export async function getStaticProps({ params }) {
@@ -32,6 +33,7 @@ export async function getStaticProps({ params }) {
       seoData,
       blog,
     },
+    revalidate: 10,
   };
 }
 
@@ -73,6 +75,15 @@ const BlogPosts = ({ seoData, blog }) => {
                 {blog.title}
               </h3>
 
+              <div>
+                <img
+                  src={blog.image.url}
+                  alt={blog.title}
+                  className="w-full h-96 object-cover rounded-lg mb-6"
+                  layout="fill"
+                  objectFit="cover"
+                />
+              </div>
               {/* show date in formate */}
               <div className="flex items-center">
                 <div className="flex items-center gap-2 text-gray-400 mb-6">
@@ -85,23 +96,21 @@ const BlogPosts = ({ seoData, blog }) => {
               </div>
 
               <div className="prose prose-invert max-w-none">
-                <p className="text-sm md:text-base text-white mb-3">
-                  <div
-                    dangerouslySetInnerHTML={{
-                      __html: blog ? blog.description : "",
-                    }}
-                  ></div>
-                </p>
+                <p
+                  dangerouslySetInnerHTML={{
+                    __html: blog ? blog.description : "",
+                  }}
+                  className="text-sm md:text-base text-white mb-3"
+                ></p>
               </div>
 
               <div className="prose prose-invert max-w-none">
-                <p className="text-sm md:text-base text-white mb-3">
-                  <div
-                    dangerouslySetInnerHTML={{
-                      __html: blog ? blog.metaDescription : "",
-                    }}
-                  ></div>
-                </p>
+                <p
+                  dangerouslySetInnerHTML={{
+                    __html: blog ? blog.metaDescription : "",
+                  }}
+                  className="text-sm md:text-base text-white mb-3"
+                ></p>
               </div>
             </div>
 
