@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Search } from "lucide-react";
 import axios from "axios";
-import { ThreeDots } from "react-loader-spinner"; // Import the loader
+import { ThreeDots } from "react-loader-spinner";
 import Link from "next/link";
 import Newsletter from "@/components/Newsletter";
 
