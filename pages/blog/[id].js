@@ -60,6 +60,12 @@ const BlogPosts = ({ seoData, blog }) => {
     fetchBlogs();
   }, []);
 
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
   return (
     <>
       <Head>
@@ -75,15 +81,6 @@ const BlogPosts = ({ seoData, blog }) => {
                 {blog.title}
               </h3>
 
-              <div>
-                <img
-                  src={blog.image.url}
-                  alt={blog.title}
-                  className="w-full h-96 object-cover rounded-lg mb-6"
-                  layout="fill"
-                  objectFit="cover"
-                />
-              </div>
               {/* show date in formate */}
               <div className="flex items-center">
                 <div className="flex items-center gap-2 text-gray-400 mb-6">
@@ -95,23 +92,27 @@ const BlogPosts = ({ seoData, blog }) => {
                 </div>
               </div>
 
-              <div className="prose prose-invert max-w-none">
-                <p
-                  dangerouslySetInnerHTML={{
-                    __html: blog ? blog.description : "",
-                  }}
-                  className="text-sm md:text-base text-white mb-3"
-                ></p>
-              </div>
+              {isClient && (
+                <div className="prose prose-invert max-w-none">
+                  <p
+                    dangerouslySetInnerHTML={{
+                      __html: blog ? blog.description : "",
+                    }}
+                    className="text-sm md:text-base text-white mb-3"
+                  ></p>
+                </div>
+              )}
 
-              <div className="prose prose-invert max-w-none">
-                <p
-                  dangerouslySetInnerHTML={{
-                    __html: blog ? blog.metaDescription : "",
-                  }}
-                  className="text-sm md:text-base text-white mb-3"
-                ></p>
-              </div>
+              {isClient && (
+                <div className="prose prose-invert max-w-none">
+                  <p
+                    dangerouslySetInnerHTML={{
+                      __html: blog ? blog.metaDescription : "",
+                    }}
+                    className="text-sm text-white mb-3"
+                  ></p>
+                </div>
+              )}
             </div>
 
             {/* Sidebar */}

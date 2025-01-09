@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect, useRef } from "react";
 import dynamic from "next/dynamic";
 import { Trash2, Upload, ArrowRight } from "lucide-react";
 import axios from "axios";
@@ -17,6 +17,8 @@ const Admin = () => {
   const [descriptionImages, setDescriptionImages] = useState([]);
   const [metaDescriptionImages, setMetaDescriptionImages] = useState([]);
 
+  const fileInputRef = useRef(null);
+
   const router = useRouter();
 
   const handleDrop = useCallback((event) => {
@@ -30,6 +32,17 @@ const Admin = () => {
   const handleDragOver = useCallback((event) => {
     event.preventDefault();
   }, []);
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setFeaturedImage(file);
+    }
+  };
+
+  const handleClick = () => {
+    fileInputRef.current.click();
+  };
 
   // Get token from local storage and solve the error is localStorage is not defined
   let token;
@@ -211,7 +224,14 @@ const Admin = () => {
                 className="mt-1 flex justify-center rounded-lg border-2 border-dashed p-6 border-gray-300"
                 onDrop={handleDrop}
                 onDragOver={handleDragOver}
+                onClick={handleClick}
               >
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  style={{ display: "none" }}
+                  onChange={handleFileChange}
+                />
                 {featuredImage ? (
                   <img
                     src={URL.createObjectURL(featuredImage)}
