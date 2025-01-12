@@ -15,7 +15,13 @@ const Editor = ({ setDescription, description }) => {
       const modules = {
         toolbar: {
           container: [
-            [{ header: "1" }, { header: "2" }, { font: [] }],
+            [
+              { header: "1" },
+              { header: "2" },
+              { header: "3" },
+              { header: "4" },
+              { font: [] },
+            ],
             [{ size: [] }],
             ["bold", "italic", "underline", "strike", "blockquote"],
             [{ list: "ordered" }, { list: "bullet" }],

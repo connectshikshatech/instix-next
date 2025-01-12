@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Head from "next/head";
 import axios from "axios";
-import Image from "next/image";
 import { useRouter } from "next/router";
 
 export async function getStaticPaths() {
@@ -61,10 +60,42 @@ const BlogPosts = ({ seoData, blog }) => {
   }, []);
 
   const [isClient, setIsClient] = useState(false);
+  const [toc, setToc] = useState([]);
 
   useEffect(() => {
     setIsClient(true);
   }, []);
+
+  const extractTOC = (content) => {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(content, "text/html");
+    const headings = doc.querySelectorAll("h1, h2, h3");
+
+    return Array.from(headings).map((heading) => ({
+      text: heading.textContent,
+      level: parseInt(heading.tagName.slice(1)),
+    }));
+  };
+
+  useEffect(() => {
+    const toc = extractTOC(blog.description);
+
+    setToc(toc);
+  }, [blog]);
+
+  const handleScollToHeading = (text) => {
+    const headings = document.querySelectorAll("h1, h2, h3");
+    const heading = Array.from(headings).find(
+      (heading) => heading.textContent.trim() === text.trim()
+    );
+
+    if (heading) {
+      const yOffset = -150; // Adjust this value as needed
+      const y =
+        heading.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      window.scrollTo({ top: y, behavior: "smooth" });
+    }
+  };
 
   return (
     <>
@@ -75,6 +106,78 @@ const BlogPosts = ({ seoData, blog }) => {
       <div className="min-h-screen mt-12 bg-[#1a1a1a] text-white py-24 md:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Sidebar for mobile */}
+            <div className="lg:hidden">
+              <div className="bg-[#0a0b0d] rounded-lg p-6 mb-4">
+                <h2 className="text-2xl font-bold mb-6 pb-2 border-b border-gray-700">
+                  Table of Contents
+                </h2>
+                <div className="space-y-4">
+                  {toc.map((item) => (
+                    <div key={item.text} className={`space-y-4 mt-4`}>
+                      <div className="flex items-start gap-3">
+                        <div className="mt-1 text-gray-400">
+                          <svg
+                            className="w-4 h-4"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M9 5l7 7-7 7"
+                            />
+                          </svg>
+                        </div>
+                        <p
+                          onClick={() => handleScollToHeading(item.text)}
+                          className={`hover:text-gray-300 hover:border-b-2 hover:border-yellow-300 cursor-pointer transition-colors "text-gray-300`}
+                        >
+                          {item.text}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="bg-[#0a0b0d] rounded-lg p-6">
+                <h2 className="text-2xl font-bold mb-6 pb-2 border-b border-gray-700">
+                  Latest Blogs
+                </h2>
+                {allBlogs.map((blog, idx) => (
+                  <div
+                    key={blog._id}
+                    className={`space-y-4 ${idx === 0 ? "mt-0" : "mt-4"}`}
+                  >
+                    <div className="flex items-start gap-3">
+                      <div className="mt-1 text-gray-400">
+                        <svg
+                          className="w-4 h-4"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M9 5l7 7-7 7"
+                          />
+                        </svg>
+                      </div>
+                      <p
+                        onClick={() => router.push(`/blog/${blog._id}`)}
+                        className={`hover:text-gray-300 hover:border-b-2 hover:border-yellow-300 cursor-pointer transition-colors "text-gray-300`}
+                      >
+                        {blog.title}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
             {/* Main Content */}
             <div className="lg:col-span-2">
               <h3 className="text-3xl md:text-4xl font-bold mb-4">
@@ -114,43 +217,80 @@ const BlogPosts = ({ seoData, blog }) => {
                 </div>
               )}
             </div>
-
-            {/* Sidebar */}
-            <div className="lg:col-span-1">
-              <div className="bg-[#0a0b0d] rounded-lg p-6">
-                <h2 className="text-2xl font-bold mb-6 pb-2 border-b border-gray-700">
-                  Latest Blogs
-                </h2>
-                {allBlogs.map((blog, idx) => (
-                  <div
-                    key={blog._id}
-                    className={`space-y-4 ${idx === 0 ? "mt-0" : "mt-4"}`}
-                  >
-                    <div className="flex items-start gap-3">
-                      <div className="mt-1 text-gray-400">
-                        <svg
-                          className="w-4 h-4"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M9 5l7 7-7 7"
-                          />
-                        </svg>
+            {/* Sidebar for desktop */}
+            <div className="hidden lg:block lg:col-span-1">
+              <div className="lg:sticky lg:top-28">
+                {/* TOC sidebar */}
+                <div className="bg-[#0a0b0d] rounded-lg p-6 mb-4">
+                  <h2 className="text-2xl font-bold mb-6 pb-2 border-b border-gray-700">
+                    Table of Contents
+                  </h2>
+                  <div className="space-y-4">
+                    {toc.map((item) => (
+                      <div key={item.text} className={`space-y-4 mt-4`}>
+                        <div className="flex items-start gap-3">
+                          <div className="mt-1 text-gray-400">
+                            <svg
+                              className="w-4 h-4"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M9 5l7 7-7 7"
+                              />
+                            </svg>
+                          </div>
+                          <p
+                            onClick={() => handleScollToHeading(item.text)}
+                            className={`hover:text-gray-300 hover:border-b-2 hover:border-yellow-300 cursor-pointer transition-colors "text-gray-300`}
+                          >
+                            {item.text}
+                          </p>
+                        </div>
                       </div>
-                      <p
-                        onClick={() => router.push(`/blog/${blog._id}`)}
-                        className={`hover:text-gray-300 hover:border-b-2 hover:border-yellow-300 cursor-pointer transition-colors "text-gray-300`}
-                      >
-                        {blog.title}
-                      </p>
-                    </div>
+                    ))}
                   </div>
-                ))}
+                </div>
+                {/* Sidebar */}
+                <div className="bg-[#0a0b0d] rounded-lg p-6">
+                  <h2 className="text-2xl font-bold mb-6 pb-2 border-b border-gray-700">
+                    Latest Blogs
+                  </h2>
+                  {allBlogs.map((blog, idx) => (
+                    <div
+                      key={blog._id}
+                      className={`space-y-4 ${idx === 0 ? "mt-0" : "mt-4"}`}
+                    >
+                      <div className="flex items-start gap-3">
+                        <div className="mt-1 text-gray-400">
+                          <svg
+                            className="w-4 h-4"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M9 5l7 7-7 7"
+                            />
+                          </svg>
+                        </div>
+                        <p
+                          onClick={() => router.push(`/blog/${blog._id}`)}
+                          className={`hover:text-gray-300 hover:border-b-2 hover:border-yellow-300 cursor-pointer transition-colors "text-gray-300`}
+                        >
+                          {blog.title}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
