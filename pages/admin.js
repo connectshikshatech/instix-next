@@ -1,10 +1,10 @@
 import React, { useState, useCallback, useEffect, useRef } from "react";
-import dynamic from "next/dynamic";
-import { Trash2, Upload, ArrowRight } from "lucide-react";
+import { Upload, ArrowRight } from "lucide-react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { useRouter } from "next/router";
 import Editor from "@/components/Editor";
+import Link from "next/link";
 
 const Admin = () => {
   const [metaDescription, setMetaDescription] = useState("");
@@ -12,14 +12,47 @@ const Admin = () => {
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState("");
   const [featuredImage, setFeaturedImage] = useState(null);
-  const [allBlogs, setAllBlogs] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [descriptionImages, setDescriptionImages] = useState([]);
-  const [metaDescriptionImages, setMetaDescriptionImages] = useState([]);
 
   const fileInputRef = useRef(null);
 
   const router = useRouter();
+
+  // get query params
+  const { id } = router.query;
+
+  const fetchBlog = async () => {
+    const res = await axios.get(
+      `${process.env.NEXT_PUBLIC_API_URL}api/admin/blog/get/${id}`
+    );
+    if (res.data.success) {
+      setTitle(res.data.data.title);
+      setCategory(res.data.data.category);
+      setDescription(res.data.data.description);
+      setMetaDescription(res.data.data.metaDescription);
+      setFeaturedImage(res.data.data.image ? res.data.data.image.url : null);
+    }
+  };
+
+  useEffect(() => {
+    if (id === undefined) {
+      setTitle("");
+      setCategory("");
+      setDescription("");
+      setMetaDescription("");
+      setFeaturedImage(null);
+
+      return;
+    }
+
+    if (id) {
+      try {
+        fetchBlog();
+      } catch (error) {
+        console.error("Error fetching blog:", error);
+      }
+    }
+  }, [id]);
 
   const handleDrop = useCallback((event) => {
     event.preventDefault();
@@ -44,7 +77,6 @@ const Admin = () => {
     fileInputRef.current.click();
   };
 
-  // Get token from local storage and solve the error is localStorage is not defined
   let token;
   if (typeof window !== "undefined") {
     token = localStorage.getItem("token");
@@ -78,8 +110,6 @@ const Admin = () => {
         }
       );
 
-      console.log(res);
-
       if (res.data.success) {
         setTitle("");
         setCategory("");
@@ -91,8 +121,6 @@ const Admin = () => {
           title: res.data.message,
           confirmButtonColor: "#4caf50",
         });
-
-        setAllBlogs((prevBlogs) => [res.data.data, ...prevBlogs]);
       }
     } catch (error) {
       console.log(error);
@@ -108,41 +136,76 @@ const Admin = () => {
     }
   };
 
-  useEffect(() => {
-    const fetchBlogs = async () => {
-      try {
-        const res = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_URL}api/admin/blog/getAll`
-        );
-
-        if (res.data.success) {
-          setAllBlogs(res.data.data);
-        }
-      } catch (error) {
-        console.error("Error fetching blogs:", error);
-      }
-    };
-
-    fetchBlogs();
-  }, []);
-
-  const redirectToBlog = (id) => {
-    router.push(`/blog/${id}`);
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    router.push("/");
   };
 
-  const deleteBlog = async (id) => {
+  const handlePreview = () => {
+    const previewWindow = window.open("", "_blank");
+    previewWindow.document.write(`
+      <html>
+        <head>
+          <title>${title}</title>
+          <meta name="description" content="${metaDescription}">
+          <style>
+            body {
+              font-family: Arial, sans-serif;
+              padding: 20px;
+            }
+            h1 {
+              font-size: 2rem;
+              margin-bottom: 1rem;
+            }
+            p {
+              font-size: 1rem;
+              margin-bottom: 1rem;
+            }
+            img {
+              max-width: 100%;
+              height: auto;
+              margin-bottom: 1rem;
+            }
+          </style>
+        </head>
+        <body>
+          <h1>${title}</h1>
+          <p>${description}</p>
+          <p>${metaDescription}</p>
+        </body>
+      </html>
+    `);
+  };
+
+  const handleUpdate = async (event) => {
+    event.preventDefault();
+
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("category", category);
+    formData.append("description", description);
+    formData.append("metaDescription", metaDescription);
+    formData.append("image", featuredImage);
+
     try {
-      const res = await axios.delete(
-        `${process.env.NEXT_PUBLIC_API_URL}api/admin/blog/delete/${id}`,
+      setLoading(true);
+      const res = await axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL}api/admin/blog/update/${id}`,
+        formData,
         {
           headers: {
             Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
           },
         }
       );
 
       if (res.data.success) {
-        setAllBlogs((prevBlogs) => prevBlogs.filter((blog) => blog._id !== id));
+        setTitle("");
+        setCategory("");
+        setDescription("");
+        setMetaDescription("");
+        setFeaturedImage(null);
         Swal.fire({
           icon: "success",
           title: res.data.message,
@@ -151,34 +214,32 @@ const Admin = () => {
       }
     } catch (error) {
       console.log(error);
+
       Swal.fire({
         icon: "error",
         title: "An error occurred",
         text: error.response.data.message,
         confirmButtonColor: "#d33",
       });
+    } finally {
+      setLoading(false);
     }
-  };
-
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    router.push("/");
   };
 
   return (
     <div className="min-h-screen flex flex-col lg:flex-row justify-evenly bg-black py-36 px-4 sm:px-6 lg:px-8">
       {/* Form for Creating a New Blog Post */}
-      <div className="max-w-3xl w-full lg:w-[60%] mx-auto">
+      <div className="max-w-3xl w-full lg:w-[70%] mx-auto">
         <div className="bg-white h-auto rounded-lg shadow-lg p-6 space-y-6">
           <div className="border-b pb-4">
             <h1 className="text-2xl font-bold text-gray-900">
-              Create New Blog Post
+              {id ? "Edit Blog Post" : "Create New Blog Post"}
             </h1>
             <p className="mt-1 text-sm text-gray-500">
               Fill in the details to create your new blog post
             </p>
           </div>
-          <form className="space-y-6" onSubmit={(e) => handleSubmit(e)}>
+          <form className="space-y-6">
             {/* Blog Title */}
             <div>
               <label
@@ -234,7 +295,11 @@ const Admin = () => {
                 />
                 {featuredImage ? (
                   <img
-                    src={URL.createObjectURL(featuredImage)}
+                    src={
+                      typeof featuredImage === "string"
+                        ? featuredImage
+                        : URL.createObjectURL(featuredImage)
+                    }
                     alt="Featured"
                     className="h-32"
                   />
@@ -260,7 +325,6 @@ const Admin = () => {
               <Editor
                 setDescription={setDescription}
                 description={description}
-                setDescriptionImages={setDescriptionImages}
               />
             </div>
             {/* Meta Description */}
@@ -274,27 +338,44 @@ const Admin = () => {
               <Editor
                 setDescription={setMetaDescription}
                 description={metaDescription}
-                setDescriptionImages={setMetaDescriptionImages}
               />
             </div>
             {/* Submit Button */}
             <div className="flex justify-end">
               <button
-                type="submit"
-                className="rounded-full bg-yellow-500 px-4 py-2 text-sm font-medium text-black hover:bg-yellow-300 focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2"
+                type="button"
+                onClick={() => handlePreview()}
+                className="rounded-full bg-yellow-500 px-4 py-2 text-sm font-medium text-black hover:bg-yellow-300 focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2 mr-4"
               >
-                {loading ? "Loading..." : " Publish Post"}
+                Preview
               </button>
+              {id ? (
+                <button
+                  type="button"
+                  onClick={(e) => handleUpdate(e)}
+                  className="rounded-full bg-yellow-500 px-4 py-2 text-sm font-medium text-black hover:bg-yellow-300 focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2"
+                >
+                  {loading ? "Loading..." : " Update Post"}
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={(e) => handleSubmit(e)}
+                  className="rounded-full bg-yellow-500 px-4 py-2 text-sm font-medium text-black hover:bg-yellow-300 focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2"
+                >
+                  {loading ? "Loading..." : " Publish Post"}
+                </button>
+              )}
             </div>
           </form>
         </div>
       </div>
 
       {/* Blog List */}
-      <div className="max-w-3xl w-full lg:w-[40%] mx-auto mt-8 lg:mt-0">
-        <div className="bg-[#0a0b0d] rounded-lg p-6">
-          <div className="flex justify-between">
-            <h2 className="text-2xl font-bold mb-6 pb-2 border-b border-gray-700">
+      <div className="max-w-3xl w-full lg:w-[30%] mx-auto mt-8 lg:mt-0">
+        <div className="bg-[#0a0b0d] rounded-lg p-4 w-full">
+          {/* <div className="flex justify-between mb-6 items-center">
+            <h2 className="text-2xl font-bold pb-2 border-b border-gray-700">
               All Blog Posts
             </h2>
             <button
@@ -332,7 +413,34 @@ const Admin = () => {
                 />
               </li>
             ))}
-          </ul>
+          </ul> */}
+
+          <div className="flex justify-between mb-6 pb-3 items-center border-b border-gray-700">
+            <h2 className="text-2xl font-bold">Admin Panel</h2>
+            <button
+              type="button"
+              onClick={handleLogout}
+              className="px-3 py-1.5 xl:px-4 xl:py-2 text-xs xl:text-sm font-light hover:bg-white hover:text-black flex items-center border border-white rounded-[30px]"
+            >
+              Log out
+              <div className="ml-2 bg-white rounded-full p-1 inline-flex items-center justify-center">
+                <ArrowRight className="h-4 w-4 text-black" />
+              </div>
+            </button>
+          </div>
+
+          <Link href="/admin">
+            <div className="w-full bg-gray-900 py-2 px-3 rounded-md hover:bg-gray-800 cursor-pointer">
+              Create New Blog Post
+            </div>
+          </Link>
+
+          <Link href="/admin/blog/allBlog">
+            {" "}
+            <div className="w-full mt-2 bg-gray-900 py-2 px-3 rounded-md hover:bg-gray-800 cursor-pointer">
+              All Blog Posts
+            </div>
+          </Link>
         </div>
       </div>
     </div>

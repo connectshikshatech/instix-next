@@ -53,7 +53,7 @@ export default function Newsletter() {
           Get The Latest Industry Updates!
         </h1>
         <p className="text-gray-300 lg:text-lg text-[17px] sm:text-xl mb-8 max-w-3xl mx-auto">
-          instiX is a leading Over-the-Counter (OTC) platform designed to make
+          instiX is a leading Over-the-Counter (OTC) platform designed to make <br/>
           cryptocurrency trading easier for Institutions, HNIs, and UHNIs.
         </p>
         <form onSubmit={handleSubmit} className="flex justify-center">
