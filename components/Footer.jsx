@@ -136,7 +136,7 @@ export default function Footer() {
             </h3>
             <ul className="space-y-2">
               <li>
-                <a href="/about-Us" className="hover:text-yellow-400">
+                <a href="/about" className="hover:text-yellow-400">
                   About Us
                 </a>
               </li>
@@ -160,7 +160,7 @@ export default function Footer() {
                 </a>
               </li>
               <li>
-                <a href="/contact-Us" className="hover:text-yellow-400">
+                <a href="/contactus" className="hover:text-yellow-400">
                   Contact Us
                 </a>
               </li>
