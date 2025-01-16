@@ -32,7 +32,7 @@ export async function getStaticProps({ params }) {
       seoData,
       blog,
     },
-    revalidate: 10,
+    revalidate: 2,
   };
 }
 

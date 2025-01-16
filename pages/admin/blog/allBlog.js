@@ -92,22 +92,22 @@ const allBlog = () => {
                 </tr>
               </thead>
               <tbody>
-                {allBlogPosts.length === 0 ? (
-                  <tr>
-                    <td
-                      colSpan="4"
-                      className="text-center p-4 text-black font-semibold"
-                    >
-                      No blogs found
-                    </td>
-                  </tr>
-                ) : blogLoading ? (
+                {blogLoading ? (
                   <tr>
                     <td
                       colSpan="4"
                       className="text-center p-4 text-black font-semibold"
                     >
                       Loading...
+                    </td>
+                  </tr>
+                ) : allBlogPosts.length === 0 ? (
+                  <tr>
+                    <td
+                      colSpan="4"
+                      className="text-center p-4 text-black font-semibold"
+                    >
+                      No blogs found
                     </td>
                   </tr>
                 ) : (
