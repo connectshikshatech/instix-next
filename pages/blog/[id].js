@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import Head from "next/head";
 import axios from "axios";
 import { useRouter } from "next/router";
+import AuthContext from "@/context/authContext";
 
 export async function getStaticPaths() {
   const res = await axios.get(
@@ -30,34 +31,38 @@ export async function getStaticProps({ params }) {
   return {
     props: {
       seoData,
-      blog,
+      initialBlog: blog,
     },
     revalidate: 2,
   };
 }
 
-const BlogPosts = ({ seoData, blog }) => {
-  const [allBlogs, setAllBlogs] = useState([]);
+const BlogPosts = ({ seoData, initialBlog }) => {
+  const [blog, setBlog] = useState(initialBlog);
+
+  const { allBlogPosts, blogLoading } = useContext(AuthContext);
 
   const router = useRouter();
 
   useEffect(() => {
-    const fetchBlogs = async () => {
+    const fetchBlog = async () => {
       try {
         const res = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_URL}api/admin/blog/getAll`
+          `${process.env.NEXT_PUBLIC_API_URL}api/admin/blog/get/${router.query.id}`
         );
 
         if (res.data.success) {
-          setAllBlogs(res.data.data);
+          setBlog(res.data.data);
         }
       } catch (error) {
         console.log(error);
       }
     };
 
-    fetchBlogs();
-  }, []);
+    if (router.query.id) {
+      fetchBlog();
+    }
+  }, [router.query.id]);
 
   const [isClient, setIsClient] = useState(false);
   const [toc, setToc] = useState([]);
@@ -100,7 +105,7 @@ const BlogPosts = ({ seoData, blog }) => {
   const processDescription = (htmlContent) => {
     const parser = new DOMParser();
     const doc = parser.parseFromString(htmlContent, "text/html");
-  
+
     // Find all <li> elements with `data-list="bullet"`
     doc.querySelectorAll('li[data-list="bullet"]').forEach((li) => {
       // Replace parent <ol> with <ul> if it contains bullet lists
@@ -113,10 +118,9 @@ const BlogPosts = ({ seoData, blog }) => {
         parent.replaceWith(ul);
       }
     });
-  
+
     return doc.body.innerHTML;
   };
-  
 
   return (
     <>
@@ -167,7 +171,7 @@ const BlogPosts = ({ seoData, blog }) => {
                 <h2 className="text-2xl font-bold mb-6 pb-2 border-b border-gray-700">
                   Latest Blogs
                 </h2>
-                {allBlogs.map((blog, idx) => (
+                {allBlogPosts.map((blog, idx) => (
                   <div
                     key={blog._id}
                     className={`space-y-4 ${idx === 0 ? "mt-0" : "mt-4"}`}
@@ -284,7 +288,7 @@ const BlogPosts = ({ seoData, blog }) => {
                   <h2 className="text-2xl font-bold mb-6 pb-2 border-b border-gray-700">
                     Latest Blogs
                   </h2>
-                  {allBlogs.map((blog, idx) => (
+                  {allBlogPosts.map((blog, idx) => (
                     <div
                       key={blog._id}
                       className={`space-y-4 ${idx === 0 ? "mt-0" : "mt-4"}`}

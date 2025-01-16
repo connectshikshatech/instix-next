@@ -10,7 +10,6 @@ const BlogPage = () => {
   const [loading, setLoading] = useState(false);
   const [active, setActive] = useState("Latest Blogs");
   const [activeBlog, setActiveBlog] = useState("Latest Blogs");
-  const [allBlogs, setAllBlogs] = useState([]);
   const [filteredBlogs, setFilteredBlogs] = useState([]);
 
   const { allBlogPosts, blogLoading } = useContext(AuthContext);
