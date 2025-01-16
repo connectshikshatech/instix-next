@@ -1,67 +1,66 @@
-/* Import Poppins font */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+/* index.css or app.css */
 
+/* Import Poppins font */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+
+/* Tailwind CSS directives */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-
 /* Global styles */
 body {
-  @apply font-poppins; 
-  @apply bg-[#0a0b0d] text-white; 
+  @apply font-poppins;
+  @apply bg-[#0a0b0d] text-white;
 }
-
-
 
 .text-container {
   white-space: nowrap; /* Prevent text wrapping */
   padding: 0 50px; /* Space between repeated texts */
 }
 
-
 .custom-min-height {
-   background-image: url(/Rectangle.png);
-   background-position: center;
-   background-size:cover;
+  background-image: url(/public/Rectangle.png);
+  background-position: center;
+  background-size: cover;
 }
 
 .service-bg {
-  background-image: url(/service-bg.png);
+  background-image: url(/public/service-bg.png);
   background-position: center;
-  background-size:cover;
+  background-size: cover;
 }
-
 
 .custom-quill .ql-editor {
   color: black !important; /* Forces the text color to black */
 }
 
 /* For mobile screens - removing the minimum height */
-@media (max-width: 768px) { /* Adjust 768px to your preferred breakpoint */
+@media (max-width: 768px) {
+  /* Adjust 768px to your preferred breakpoint */
   .custom-min-height {
-      min-height: auto; /* Removes the 80vh setting */
+    min-height: auto; /* Removes the 80vh setting */
   }
 }
 
 @media (max-width: 768px) {
- .padding {
-  padding: 1rem;
- }
+  .padding {
+    padding: 1rem;
   }
-  
-  @media (min-width: 769px) and (max-width: 1024px) {
- .padding {
-  padding: 1rem; /* Adjust as needed for tablet-specific padding */
- }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .padding {
+    padding: 1rem; /* Adjust as needed for tablet-specific padding */
   }
-  
-  .slick-prev, .slick-next {
-    display: none !important;
-  }
-  
-  
-  /* Hide the scrollbar but allow scrolling */
+}
+
+.slick-prev,
+.slick-next {
+  display: none !important;
+}
+
+/* Hide the scrollbar but allow scrolling */
 .scrollbar-hidden::-webkit-scrollbar {
   display: none; /* Hide scrollbar in Webkit browsers (Chrome, Safari, etc.) */
 }
@@ -79,7 +78,6 @@ body {
   color: white;
 }
 
-
 .custom-h3 {
   position: relative;
   display: inline-block;
@@ -91,12 +89,10 @@ body {
   position: absolute;
   bottom: 0;
   left: 0;
-  width: calc(4ch); 
+  width: calc(4ch);
   height: 2px;
-  background-color: #ffcc00; 
+  background-color: #ffcc00;
 }
-
-
 
 /* Set default text color to white */
 .ql-editor {
@@ -111,4 +107,23 @@ body {
 /* Optional: Hover effect for links */
 .ql-editor a:hover {
   color: lightyellow;
+}
+
+.prose ul {
+  list-style-type: disc; /* Show bullets */
+  margin-left: 1.5rem; /* Add indentation */
+}
+
+.prose ol {
+  list-style-type: decimal; /* Numbered lists */
+  margin-left: 1.5rem;
+}
+
+ol[data-list="bullet"] {
+  list-style-type: disc !important; /* Use bullet points */
+  margin-left: 1.5rem; /* Add indentation */
+}
+
+ol[data-list="bullet"] li::marker {
+  content: "\2022"; /* Bullet character */
 }

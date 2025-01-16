@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { ArrowRight } from "lucide-react";
 import dynamic from "next/dynamic";
+import Link from "next/link";
 
 // Dynamically import AOS to ensure it's only loaded on the client
 const AOS = dynamic(() => import("aos"), { ssr: false });
@@ -138,11 +139,14 @@ const Hero = () => {
                 </div>
               </button>
             </a>
-            <a href="/about-Us" className="inline-block">
+            <Link href="/about" className="inline-block">
               <button className="px-6 py-3 border border-white hover:bg-white hover:text-black text-white rounded-full font-medium">
                 Learn More
+                <div className="ml-2 bg-white rounded-full p-1  items-center justify-center sm:inline-flex inline-flex">
+                  <ArrowRight className="h-4 w-4 text-black" />
+                </div>
               </button>
-            </a>
+            </Link>
           </div>
         </div>
       </div>

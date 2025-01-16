@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import dynamic from "next/dynamic";
 import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 import axios from "axios";
 import Link from "next/link";
+import AuthContext from "@/context/authContext";
 
 // Dynamically import AOS
 const AOS = dynamic(() => import("aos"), { ssr: false });
@@ -45,7 +46,7 @@ const blogPosts = [
 ];
 
 export default function BlogSection() {
-  const [allBlogs, setAllBlogs] = useState([]);
+  const { allBlogPosts } = useContext(AuthContext);
 
   const stripHtml = (html) => {
     if (typeof window === "undefined") return html;
@@ -69,21 +70,7 @@ export default function BlogSection() {
         once: true,
       });
     }
-    const fetchBlogs = async () => {
-      try {
-        const res = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_URL}api/admin/blog/getAll`
-        );
-
-        if (res.data.success) {
-          setAllBlogs(res.data.data);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    fetchBlogs();
+   
   }, []);
   return (
     <div
@@ -114,7 +101,7 @@ export default function BlogSection() {
 
         {/* Blog Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {(allBlogs.length > 0 ? allBlogs : blogPosts)
+          {(allBlogPosts.length > 0 ? allBlogPosts : blogPosts)
             .slice(0, 4)
             .map((blog, index) => (
               <div

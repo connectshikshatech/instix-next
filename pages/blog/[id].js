@@ -97,6 +97,27 @@ const BlogPosts = ({ seoData, blog }) => {
     }
   };
 
+  const processDescription = (htmlContent) => {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(htmlContent, "text/html");
+  
+    // Find all <li> elements with `data-list="bullet"`
+    doc.querySelectorAll('li[data-list="bullet"]').forEach((li) => {
+      // Replace parent <ol> with <ul> if it contains bullet lists
+      const parent = li.parentElement;
+      if (parent.tagName === "OL") {
+        const ul = document.createElement("ul");
+        Array.from(parent.children).forEach((child) => {
+          ul.appendChild(child);
+        });
+        parent.replaceWith(ul);
+      }
+    });
+  
+    return doc.body.innerHTML;
+  };
+  
+
   return (
     <>
       <Head>
@@ -199,8 +220,11 @@ const BlogPosts = ({ seoData, blog }) => {
                 <div className="prose prose-invert max-w-none">
                   <p
                     dangerouslySetInnerHTML={{
-                      __html: blog ? blog.description : "",
+                      __html: processDescription(blog.description),
                     }}
+                    // dangerouslySetInnerHTML={{
+                    //   __html: blog ? blog.description : "",
+                    // }}
                     className="text-sm md:text-base text-white mb-3"
                   ></p>
                 </div>

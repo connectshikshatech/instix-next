@@ -1,10 +1,17 @@
-import React, { useState, useCallback, useEffect, useRef } from "react";
+import React, {
+  useState,
+  useCallback,
+  useEffect,
+  useRef,
+  useContext,
+} from "react";
 import { Upload, ArrowRight } from "lucide-react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { useRouter } from "next/router";
 import Editor from "@/components/Editor";
 import Link from "next/link";
+import AuthContext from "@/context/authContext";
 
 const Admin = () => {
   const [metaDescription, setMetaDescription] = useState("");
@@ -14,9 +21,17 @@ const Admin = () => {
   const [featuredImage, setFeaturedImage] = useState(null);
   const [loading, setLoading] = useState(false);
 
+  const { authAdmin, HandleLogout, setAllBlogPosts } = useContext(AuthContext);
+
   const fileInputRef = useRef(null);
 
   const router = useRouter();
+
+  useEffect(() => {
+    if (!authAdmin.isAuth) {
+      router.push("/login");
+    }
+  }, [authAdmin]);
 
   // get query params
   const { id } = router.query;
@@ -77,17 +92,6 @@ const Admin = () => {
     fileInputRef.current.click();
   };
 
-  let token;
-  if (typeof window !== "undefined") {
-    token = localStorage.getItem("token");
-  }
-
-  useEffect(() => {
-    if (!token) {
-      router.push("/login");
-    }
-  }, []);
-
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -104,13 +108,14 @@ const Admin = () => {
         formData,
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${authAdmin.token}`,
             "Content-Type": "multipart/form-data",
           },
         }
       );
 
       if (res.data.success) {
+        setAllBlogPosts((prevBlogs) => [...prevBlogs, res.data.data]);
         setTitle("");
         setCategory("");
         setDescription("");
@@ -134,11 +139,6 @@ const Admin = () => {
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    router.push("/");
   };
 
   const handlePreview = () => {
@@ -194,13 +194,16 @@ const Admin = () => {
         formData,
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${authAdmin.token}`,
             "Content-Type": "multipart/form-data",
           },
         }
       );
 
       if (res.data.success) {
+        setAllBlogPosts((prevBlogs) =>
+          prevBlogs.map((blog) => (blog._id === id ? res.data.data : blog))
+        );
         setTitle("");
         setCategory("");
         setDescription("");
@@ -419,7 +422,7 @@ const Admin = () => {
             <h2 className="text-2xl font-bold">Admin Panel</h2>
             <button
               type="button"
-              onClick={handleLogout}
+              onClick={HandleLogout}
               className="px-3 py-1.5 xl:px-4 xl:py-2 text-xs xl:text-sm font-light hover:bg-white hover:text-black flex items-center border border-white rounded-[30px]"
             >
               Log out

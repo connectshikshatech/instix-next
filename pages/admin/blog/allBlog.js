@@ -3,48 +3,29 @@ import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import Swal from "sweetalert2";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import AuthContext from "@/context/authContext";
 
 const allBlog = () => {
-  const [allBlogs, setAllBlogs] = useState([]);
   const [loading2, setLoading2] = useState(false);
   const [loadingBlogId, setLoadingBlogId] = useState(null);
   const router = useRouter();
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    router.push("/");
-  };
-  let token;
-  if (typeof window !== "undefined") {
-    token = localStorage.getItem("token");
-  }
+
+  const {
+    authAdmin,
+    HandleLogout,
+    allBlogPosts,
+    setAllBlogPosts,
+    blogLoading,
+  } = useContext(AuthContext);
+
+  // console.log(blogLoading);
 
   useEffect(() => {
-    if (!token) {
+    if (!authAdmin.isAuth) {
       router.push("/login");
     }
-  }, []);
-
-  useEffect(() => {
-    const fetchBlogs = async () => {
-      try {
-        setLoading2(true);
-        const res = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_URL}api/admin/blog/getAll`
-        );
-
-        if (res.data.success) {
-          setAllBlogs(res.data.data);
-        }
-      } catch (error) {
-        console.error("Error fetching blogs:", error);
-      } finally {
-        setLoading2(false);
-      }
-    };
-
-    fetchBlogs();
-  }, []);
+  }, [authAdmin]);
 
   const deleteBlog = async (id) => {
     try {
@@ -53,13 +34,15 @@ const allBlog = () => {
         `${process.env.NEXT_PUBLIC_API_URL}api/admin/blog/delete/${id}`,
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${authAdmin.token}`,
           },
         }
       );
 
       if (res.data.success) {
-        setAllBlogs((prevBlogs) => prevBlogs.filter((blog) => blog._id !== id));
+        setAllBlogPosts((prevBlogs) =>
+          prevBlogs.filter((blog) => blog._id !== id)
+        );
         Swal.fire({
           icon: "success",
           title: res.data.message,
@@ -109,16 +92,7 @@ const allBlog = () => {
                 </tr>
               </thead>
               <tbody>
-                {loading2 ? (
-                  <tr>
-                    <td
-                      colSpan="4"
-                      className="text-center p-4 text-black font-semibold"
-                    >
-                      Loading...
-                    </td>
-                  </tr>
-                ) : allBlogs.length === 0 ? (
+                {allBlogPosts.length === 0 ? (
                   <tr>
                     <td
                       colSpan="4"
@@ -127,8 +101,17 @@ const allBlog = () => {
                       No blogs found
                     </td>
                   </tr>
+                ) : blogLoading ? (
+                  <tr>
+                    <td
+                      colSpan="4"
+                      className="text-center p-4 text-black font-semibold"
+                    >
+                      Loading...
+                    </td>
+                  </tr>
                 ) : (
-                  allBlogs.map((blog) => (
+                  allBlogPosts.map((blog) => (
                     <tr key={blog._id}>
                       <td className="border p-2.5">
                         <img
@@ -180,7 +163,7 @@ const allBlog = () => {
             <h2 className="text-2xl font-bold">Admin Panel</h2>
             <button
               type="button"
-              onClick={handleLogout}
+              onClick={HandleLogout}
               className="px-3 py-1.5 xl:px-4 xl:py-2 text-xs xl:text-sm font-light hover:bg-white hover:text-black flex items-center border border-white rounded-[30px]"
             >
               Log out

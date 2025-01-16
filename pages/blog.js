@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Search } from "lucide-react";
 import axios from "axios";
 import { ThreeDots } from "react-loader-spinner";
 import Link from "next/link";
 import Newsletter from "@/components/Newsletter";
+import AuthContext from "@/context/authContext";
 
 const BlogPage = () => {
   const [loading, setLoading] = useState(false);
@@ -11,6 +12,8 @@ const BlogPage = () => {
   const [activeBlog, setActiveBlog] = useState("Latest Blogs");
   const [allBlogs, setAllBlogs] = useState([]);
   const [filteredBlogs, setFilteredBlogs] = useState([]);
+
+  const { allBlogPosts, blogLoading } = useContext(AuthContext);
 
   const stripHtml = (html) => {
     if (typeof window === "undefined") return html;
@@ -25,40 +28,22 @@ const BlogPage = () => {
   };
 
   useEffect(() => {
-    const fetchBlogs = async () => {
-      try {
-        const res = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_URL}api/admin/blog/getAll`
-        );
-
-        if (res.data.success) {
-          setAllBlogs(res.data.data);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    fetchBlogs();
-  }, []);
-
-  useEffect(() => {
     if (active === "Latest Blogs") {
       // show only the latest 6 blogs
-      const latest = allBlogs.slice(0, 5);
+      const latest = allBlogPosts.slice(0, 5);
       setFilteredBlogs(latest);
     } else {
-      const filtered = allBlogs.filter((blog) =>
+      const filtered = allBlogPosts.filter((blog) =>
         blog.category.includes(active)
       );
       setFilteredBlogs(filtered);
     }
-  }, [active, allBlogs]);
+  }, [active, allBlogPosts]);
 
   return (
     <div className="min-h-screen bg-[#1a1a1a] pt-24 text-white w-full">
       {/* Loader */}
-      {loading ? (
+      {blogLoading ? (
         <div className="flex items-center justify-center h-screen">
           <ThreeDots
             visible={true}
@@ -138,7 +123,7 @@ const BlogPage = () => {
                     </div>
                     <div className="p-4 flex flex-col flex-grow">
                       <Link
-                        href="/blog/7676"
+                        href={`/blog/${blog._id}`}
                         className="text-lg md:text-xl font-semibold mb-3 line-clamp-2 hover:text-yellow-500 transition-colors"
                       >
                         {blog.title}

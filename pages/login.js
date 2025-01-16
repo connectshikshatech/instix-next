@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Lock, Mail } from "lucide-react";
 import Swal from "sweetalert2";
 import axios from "axios";
 import Head from "next/head";
 import { useRouter } from "next/navigation";
+import AuthContext from "@/context/authContext";
 
 export async function getStaticProps() {
   const seoData = {
@@ -25,13 +26,13 @@ const login = ({ seoData }) => {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-  // Redirect if already logged in
+  const { authAdmin } = useContext(AuthContext);
+
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      router.push("/admin"); // Redirect to admin page if already logged in
+    if (authAdmin.isAuth) {
+      router.push("/admin");
     }
-  }, [router]);
+  }, [authAdmin]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
