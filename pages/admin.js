@@ -142,39 +142,15 @@ const Admin = () => {
   };
 
   const handlePreview = () => {
-    const previewWindow = window.open("", "_blank");
-    previewWindow.document.write(`
-      <html>
-        <head>
-          <title>${title}</title>
-          <meta name="description" content="${metaDescription}">
-          <style>
-            body {
-              font-family: Arial, sans-serif;
-              padding: 20px;
-            }
-            h1 {
-              font-size: 2rem;
-              margin-bottom: 1rem;
-            }
-            p {
-              font-size: 1rem;
-              margin-bottom: 1rem;
-            }
-            img {
-              max-width: 100%;
-              height: auto;
-              margin-bottom: 1rem;
-            }
-          </style>
-        </head>
-        <body>
-          <h1>${title}</h1>
-          <p>${description}</p>
-          <p>${metaDescription}</p>
-        </body>
-      </html>
-    `);
+    router.push({
+      pathname: "/preview",
+      query: {
+        title,
+        category,
+        description,
+        metaDescription,
+      },
+    });
   };
 
   const handleUpdate = async (event) => {
