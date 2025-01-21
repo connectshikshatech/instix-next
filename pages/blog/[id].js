@@ -221,7 +221,10 @@ const BlogPosts = ({ seoData, initialBlog }) => {
               </div>
 
               {isClient && (
-                <div className="prose prose-invert max-w-none">
+                <div
+                  style={{ color: "white !important" }}
+                  className="prose prose-invert max-w-none"
+                >
                   <p
                     dangerouslySetInnerHTML={{
                       __html: processDescription(blog.description),
@@ -229,7 +232,7 @@ const BlogPosts = ({ seoData, initialBlog }) => {
                     // dangerouslySetInnerHTML={{
                     //   __html: blog ? blog.description : "",
                     // }}
-                    className="text-sm md:text-base text-white mb-3"
+                    className="text-sm md:text-base mb-3"
                   ></p>
                 </div>
               )}

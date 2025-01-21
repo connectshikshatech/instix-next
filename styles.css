@@ -96,12 +96,11 @@ body {
 
 /* Set default text color to white */
 .ql-editor {
-  color: #000; /* Default text color for editor */
+  color: #000 !important; /* Default text color for editor */
 }
 
-/* Set the link text color to yellow */
 .ql-editor a {
-  color: yellow !important; /* Override any default link color */
+  color: royalblue !important;
 }
 
 /* Optional: Hover effect for links */
@@ -126,4 +125,16 @@ ol[data-list="bullet"] {
 
 ol[data-list="bullet"] li::marker {
   content: "\2022"; /* Bullet character */
+}
+
+.prose :where(a,u):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
+  color: royalblue !important;
+}
+
+/* make all text white whether it is p span strong h1 h2 etc */
+.prose
+  :where(p, span, strong, h1, h2, h3, h4, h5, h6):not(
+    :where([class~="not-prose"], [class~="not-prose"] *)
+  ) {
+  color: white !important;
 }
