@@ -26,6 +26,7 @@ export async function getStaticProps({ params }) {
   const seoData = {
     title: blog.title,
     description: blog.metaDescription,
+    keywords: blog.metaKeywords,
   };
 
   return {
@@ -127,6 +128,7 @@ const BlogPosts = ({ seoData, initialBlog }) => {
       <Head>
         <title>{seoData.title}</title>
         <meta name="description" content={seoData.description} />
+        <meta name="keywords" content={seoData.keywords} />
       </Head>
       <div className="min-h-screen mt-12 bg-[#1a1a1a] text-white py-24 md:px-8">
         <div className="max-w-7xl mx-auto">

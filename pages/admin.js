@@ -17,6 +17,7 @@ const Admin = () => {
   const [metaDescription, setMetaDescription] = useState("");
   const [description, setDescription] = useState("");
   const [title, setTitle] = useState("");
+  const [metaKeywords, setMetaKeywords] = useState("");
   const [category, setCategory] = useState("");
   const [featuredImage, setFeaturedImage] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -44,6 +45,7 @@ const Admin = () => {
       setTitle(res.data.data.title);
       setCategory(res.data.data.category);
       setDescription(res.data.data.description);
+      setMetaKeywords(res.data.data.metaKeywords);
       setMetaDescription(res.data.data.metaDescription);
       setFeaturedImage(res.data.data.image ? res.data.data.image.url : null);
     }
@@ -54,6 +56,7 @@ const Admin = () => {
       setTitle("");
       setCategory("");
       setDescription("");
+      setMetaKeywords("");
       setMetaDescription("");
       setFeaturedImage(null);
 
@@ -99,6 +102,7 @@ const Admin = () => {
     formData.append("title", title);
     formData.append("category", category);
     formData.append("description", description);
+    formData.append("metaKeywords", metaKeywords);
     formData.append("metaDescription", metaDescription);
     formData.append("image", featuredImage);
     try {
@@ -119,6 +123,7 @@ const Admin = () => {
         setTitle("");
         setCategory("");
         setDescription("");
+        setMetaKeywords("");
         setMetaDescription("");
         setFeaturedImage(null);
         Swal.fire({
@@ -148,6 +153,7 @@ const Admin = () => {
         title,
         category,
         description,
+        metaKeywords,
         metaDescription,
       },
     });
@@ -160,6 +166,7 @@ const Admin = () => {
     formData.append("title", title);
     formData.append("category", category);
     formData.append("description", description);
+    formData.append("metaKeywords", metaKeywords);
     formData.append("metaDescription", metaDescription);
     formData.append("image", featuredImage);
 
@@ -183,6 +190,7 @@ const Admin = () => {
         setTitle("");
         setCategory("");
         setDescription("");
+        setMetaKeywords("");
         setMetaDescription("");
         setFeaturedImage(null);
         Swal.fire({
@@ -236,6 +244,24 @@ const Admin = () => {
                 onChange={(e) => setTitle(e.target.value)}
               />
             </div>
+            {/* Blog Keywords */}
+            <div>
+              <label
+                htmlFor="metaKeywords"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Meta Keywords
+              </label>
+              <input
+                type="text"
+                id="metaKeywords"
+                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                placeholder="Enter meta keywords"
+                value={metaKeywords}
+                onChange={(e) => setMetaKeywords(e.target.value)}
+              />
+            </div>
+
             {/* Blog Category */}
             <div>
               <label
