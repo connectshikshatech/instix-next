@@ -1,7 +1,7 @@
 import React from "react";
 import Head from "next/head";
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
   const seoData = {
     title: "InstiX - Privacy Policy",
     description: "Learn more about our privacy policy.",

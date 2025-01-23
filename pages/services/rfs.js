@@ -4,7 +4,7 @@ import dynamic from "next/dynamic";
 import Head from "next/head";
 const AOS = dynamic(() => import("aos"), { ssr: false });
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
   const seoData = {
     title: "InstiX - Services - Request for Streaming (RFS)",
     description: "Learn more about us.",

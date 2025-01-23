@@ -26,7 +26,7 @@ export async function getStaticProps({ params }) {
   const seoData = {
     title: blog.title,
     description: blog.metaDescription,
-    keywords: blog.metaKeywords,
+    keywords: blog.metaKeywords || null, // Ensure keywords is not undefined
   };
 
   return {
@@ -34,7 +34,6 @@ export async function getStaticProps({ params }) {
       seoData,
       initialBlog: blog,
     },
-    revalidate: 2,
   };
 }
 

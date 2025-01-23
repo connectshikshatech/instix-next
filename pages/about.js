@@ -2,7 +2,7 @@ import React from "react";
 import Head from "next/head";
 import AboutMain from "@/components/about/AboutMain";
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
   const seoData = {
     title: "InstiX - About Us",
     description: "Learn more about us.",

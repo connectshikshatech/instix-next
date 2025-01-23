@@ -2,7 +2,7 @@ import React from "react";
 import Head from "next/head";
 import ContactUsMain from "@/components/contact/ContactUsMain";
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
   const seoData = {
     title: "InstiX - Contact Us",
     description: "Discover the best trading features and services with InstiX.",
