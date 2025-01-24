@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://instix-next.vercel.app/
+
+# Sitemaps
+Sitemap: https://instix-next.vercel.app/sitemap.xml

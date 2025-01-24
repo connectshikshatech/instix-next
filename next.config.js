@@ -1,7 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  output: 'export',
+  distDir: 'dist',
   images: {
+    unoptimized: true, // Disable Image Optimization API
     remotePatterns: [
       {
         protocol: "https",
@@ -15,8 +18,6 @@ const nextConfig = {
       },
     ],
   },
-  output: 'export', // Add this line
-
 };
 
 export default nextConfig;
