@@ -1,0 +1,44 @@
+{
+  "components/CoreServices.jsx -> aos": {
+    "id": "components/CoreServices.jsx -> aos",
+    "files": [
+      "static/chunks/node_modules_aos_dist_aos_f4f91f.js",
+      "static/chunks/node_modules_aos_dist_aos_bd64ad.js"
+    ]
+  },
+  "components/Tradingfeatures.jsx -> aos": {
+    "id": "components/Tradingfeatures.jsx -> aos",
+    "files": [
+      "static/chunks/node_modules_aos_dist_aos_f4f91f.js",
+      "static/chunks/node_modules_aos_dist_aos_bd64ad.js"
+    ]
+  },
+  "components/BlogSection.jsx -> aos": {
+    "id": "components/BlogSection.jsx -> aos",
+    "files": [
+      "static/chunks/node_modules_aos_dist_aos_f4f91f.js",
+      "static/chunks/node_modules_aos_dist_aos_bd64ad.js"
+    ]
+  },
+  "components/About.jsx -> aos": {
+    "id": "components/About.jsx -> aos",
+    "files": [
+      "static/chunks/node_modules_aos_dist_aos_f4f91f.js",
+      "static/chunks/node_modules_aos_dist_aos_bd64ad.js"
+    ]
+  },
+  "components/Hero.jsx -> aos": {
+    "id": "components/Hero.jsx -> aos",
+    "files": [
+      "static/chunks/node_modules_aos_dist_aos_f4f91f.js",
+      "static/chunks/node_modules_aos_dist_aos_bd64ad.js"
+    ]
+  },
+  "components/contact/ContactUsMain.jsx -> aos": {
+    "id": "components/contact/ContactUsMain.jsx -> aos",
+    "files": [
+      "static/chunks/node_modules_aos_dist_aos_f4f91f.js",
+      "static/chunks/node_modules_aos_dist_aos_bd64ad.js"
+    ]
+  }
+}

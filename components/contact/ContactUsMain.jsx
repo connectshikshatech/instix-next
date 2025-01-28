@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { Mail, HelpCircle } from "lucide-react";
 import dynamic from "next/dynamic";
-import Swal from "sweetalert2";
 import Link from "next/link";
 
 const AOS = dynamic(() => import("aos"), { ssr: false });
@@ -29,42 +28,17 @@ const ContactUsMain = () => {
     }
   }, []);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
+    const { firstName, lastName, email, message } = formData;
 
-    try {
-      const response = await fetch("http://localhost:5000/contact", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
+    // Compose the email body
+    const body = `First Name: ${firstName}%0D%0ALast Name: ${lastName}%0D%0AEmail: ${email}%0D%0AMessage: ${message}`;
 
-      const result = await response.json();
-
-      if (result.success) {
-        Swal.fire({
-          icon: "success",
-          title: "Thank you!",
-          text: "Your message has been sent successfully.",
-        });
-      } else {
-        Swal.fire({
-          icon: "error",
-          title: "Oops!",
-          text: "Something went wrong. Please try again later.",
-        });
-      }
-    } catch (error) {
-      console.error("Error sending data:", error);
-      Swal.fire({
-        icon: "error",
-        title: "Oops!",
-        text: "Something went wrong. Please try again later.",
-      });
-    }
+    // Open default email client
+    window.location.href = `mailto:support@instix.io?subject=Contact Form Submission&body=${body}`;
   };
+
   return (
     <div className="min-h-screen bg-[#1a1a1a] pt-24 text-white">
       {/* Breadcrumb Section */}

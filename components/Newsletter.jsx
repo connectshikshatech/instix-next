@@ -8,7 +8,7 @@ export default function Newsletter() {
   const [message, setMessage] = useState("");
   const [error, setError] = useState(false); // State to track errors
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
 
     // Basic email validation
@@ -19,31 +19,18 @@ export default function Newsletter() {
       return;
     }
 
-    try {
-      const response = await fetch("https://blogs.instix.io/newsletter", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email }),
-      });
+    // Construct the body of the email
+    const body = `Hello,\n\nI would like to subscribe to the newsletter using the following email: ${email}\n\nThank you.`;
 
-      const data = await response.json();
-      if (response.ok) {
-        setMessage(
-          "Thank you for subscribing! A confirmation email has been sent."
-        );
-        setError(false); // No error
-      } else {
-        setMessage(data.message || "Error: Unable to process your request.");
-        setError(true); // Mark it as an error
-      }
-      setEmail(""); // Clear the email field
-    } catch (error) {
-      setMessage("Error: Unable to process your request."); // Default error message
-      setError(true); // Mark it as an error
-      console.error(error);
-    }
+    // Redirect to the default mail client
+    window.location.href = `mailto:support@instix.io?subject=Newsletter Subscription&body=${encodeURIComponent(
+      body
+    )}`;
+
+    // Optionally clear the email field and show a message
+    setEmail("");
+    setMessage("Redirecting to your email client...");
+    setError(false);
   };
 
   return (
@@ -53,7 +40,7 @@ export default function Newsletter() {
           Get The Latest Industry Updates!
         </h1>
         <p className="text-gray-300 lg:text-lg text-[17px] sm:text-xl mb-8 max-w-3xl mx-auto">
-          instiX is a leading Over-the-Counter (OTC) platform designed to make <br/>
+          instiX is a leading Over-the-Counter (OTC) platform designed to make <br />
           cryptocurrency trading easier for Institutions, HNIs, and UHNIs.
         </p>
         <form onSubmit={handleSubmit} className="flex justify-center">

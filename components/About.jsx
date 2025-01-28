@@ -105,7 +105,7 @@ const About = () => {
               hereby makes it a go-to choice for institutions, HNIs, ultra-HNIs
               across 10+ countries.
             </p>
-            <a href="/about-Us" className="inline-block" data-aos="zoom-in">
+            <a href="/about" className="inline-block" data-aos="zoom-in">
               <button className="bg-transparent hover:bg-white hover:text-black text-white font-semibold py-3 px-6 border border-white hover:border-transparent rounded-full inline-flex items-center transition duration-300">
                 Learn More
                 <div className="ml-2 bg-white rounded-full p-1 inline-flex items-center justify-center">

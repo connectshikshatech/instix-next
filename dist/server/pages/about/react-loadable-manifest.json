@@ -1,0 +1,9 @@
+{
+  "components/about/AboutMain.jsx -> aos": {
+    "id": "components/about/AboutMain.jsx -> aos",
+    "files": [
+      "static/chunks/node_modules_aos_dist_aos_f4f91f.js",
+      "static/chunks/node_modules_aos_dist_aos_bd64ad.js"
+    ]
+  }
+}
