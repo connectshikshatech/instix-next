@@ -5,36 +5,48 @@ import { useRouter } from "next/router";
 import AuthContext from "@/context/authContext";
 
 export async function getStaticPaths() {
-  const res = await axios.get(
-    `${process.env.NEXT_PUBLIC_API_URL}api/admin/blog/getAll`
-  );
-  const blogs = res.data.data;
+  try {
+    const res = await axios.get(
+      `${process.env.NEXT_PUBLIC_API_URL}api/admin/blog/getAll`
+    );
+    const blogs = res.data.data;
 
-  const paths = blogs.map((blog) => ({
-    params: { id: blog._id },
-  }));
+    const paths = blogs.map((blog) => ({
+      params: { id: blog._id },
+    }));
 
-  return { paths, fallback: "blocking" };
+    return { paths, fallback: "blocking" };
+  } catch (error) {
+    console.error("Error fetching blog paths:", error);
+    return { paths: [], fallback: "blocking" };
+  }
 }
 
 export async function getStaticProps({ params }) {
-  const res = await axios.get(
-    `${process.env.NEXT_PUBLIC_API_URL}api/admin/blog/get/${params.id}`
-  );
-  const blog = res.data.data;
+  try {
+    const res = await axios.get(
+      `${process.env.NEXT_PUBLIC_API_URL}api/admin/blog/get/${params.id}`
+    );
+    const blog = res.data.data;
 
-  const seoData = {
-    title: blog.title,
-    description: blog.metaDescription,
-    keywords: blog.metaKeywords || null, // Ensure keywords is not undefined
-  };
+    const seoData = {
+      title: blog.title,
+      description: blog.metaDescription,
+      keywords: blog.metaKeywords || null, // Ensure keywords is not undefined
+    };
 
-  return {
-    props: {
-      seoData,
-      initialBlog: blog,
-    },
-  };
+    return {
+      props: {
+        seoData,
+        initialBlog: blog,
+      },
+    };
+  } catch (error) {
+    console.error("Error fetching blog data:", error);
+    return {
+      notFound: true,
+    };
+  }
 }
 
 const BlogPosts = ({ seoData, initialBlog }) => {
