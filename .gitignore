@@ -9,7 +9,7 @@
 !.yarn/plugins
 !.yarn/releases
 !.yarn/versions
-/tempo
+/dist
 
 # testing
 /coverage
