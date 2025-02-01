@@ -6,8 +6,8 @@
       "static/chunks/node_modules_aos_dist_aos_bd64ad.js"
     ]
   },
-  "components/Tradingfeatures.jsx -> aos": {
-    "id": "components/Tradingfeatures.jsx -> aos",
+  "components/About.jsx -> aos": {
+    "id": "components/About.jsx -> aos",
     "files": [
       "static/chunks/node_modules_aos_dist_aos_f4f91f.js",
       "static/chunks/node_modules_aos_dist_aos_bd64ad.js"
@@ -20,8 +20,8 @@
       "static/chunks/node_modules_aos_dist_aos_bd64ad.js"
     ]
   },
-  "components/About.jsx -> aos": {
-    "id": "components/About.jsx -> aos",
+  "components/Tradingfeatures.jsx -> aos": {
+    "id": "components/Tradingfeatures.jsx -> aos",
     "files": [
       "static/chunks/node_modules_aos_dist_aos_f4f91f.js",
       "static/chunks/node_modules_aos_dist_aos_bd64ad.js"

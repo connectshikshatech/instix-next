@@ -1,0 +1,9 @@
+{
+  "components/Editor.jsx -> react-quill-new": {
+    "id": "components/Editor.jsx -> react-quill-new",
+    "files": [
+      "static/chunks/node_modules_629805._.js",
+      "static/chunks/node_modules_react-quill-new_lib_index_8921ef.js"
+    ]
+  }
+}

@@ -1,0 +1,10 @@
+const CHUNK_PUBLIC_PATH = "server/pages/admin.js";
+const runtime = require("../chunks/ssr/[turbopack]_runtime.js");
+runtime.loadChunk("server/chunks/ssr/[root of the server]__06b2f3._.js");
+runtime.loadChunk("server/chunks/ssr/node_modules_next_0689e9._.js");
+runtime.loadChunk("server/chunks/ssr/node_modules_react-icons_fa_index_mjs_275a22._.js");
+runtime.loadChunk("server/chunks/ssr/node_modules_react-icons_lib_6322da._.js");
+runtime.loadChunk("server/chunks/ssr/node_modules_2bb514._.js");
+runtime.loadChunk("server/chunks/ssr/_bc8305._.css");
+runtime.loadChunk("server/chunks/ssr/[externals]_react-quill-new_7c2ffb._.js");
+module.exports = runtime.getOrInstantiateRuntimeModule("[project]/node_modules/next/dist/esm/build/templates/pages.js { INNER_PAGE => \"[project]/pages/admin.js [ssr] (ecmascript)\", INNER_DOCUMENT => \"[project]/node_modules/next/document.js [ssr] (ecmascript)\", INNER_APP => \"[project]/pages/_app.js [ssr] (ecmascript)\" } [ssr] (ecmascript)", CHUNK_PUBLIC_PATH).exports;
