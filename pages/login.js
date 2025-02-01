@@ -85,7 +85,7 @@ const login = ({ seoData }) => {
         <title>{seoData.title}</title>
         <meta name="description" content={seoData.description} />
       </Head>
-      <div className="min-h-screen bg-[1a1a1a] flex items-center justify-center p-4 mt-12">
+      <div className="min-h-screen bg-[1a1a1a] flex items-center justify-center p-4 mt-20">
         <div className="bg-white shadow-2xl rounded-2xl w-full max-w-md overflow-hidden">
           <div className="p-8">
             <div className="text-center mb-8">

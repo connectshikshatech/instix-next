@@ -930,12 +930,20 @@ img, video {
   right: 0;
 }
 
+.right-1 {
+  right: .25rem;
+}
+
 .right-1\/4 {
   right: 25%;
 }
 
 .top-0 {
   top: 0;
+}
+
+.top-1 {
+  top: .25rem;
 }
 
 .top-1\/4 {
@@ -948,14 +956,6 @@ img, video {
 
 .top-3\/4 {
   top: 75%;
-}
-
-.right-1 {
-  right: .25rem;
-}
-
-.top-1 {
-  top: .25rem;
 }
 
 .z-0 {
@@ -1067,6 +1067,10 @@ img, video {
 
 .mt-2 {
   margin-top: .5rem;
+}
+
+.mt-20 {
+  margin-top: 5rem;
 }
 
 .mt-4 {
@@ -1483,6 +1487,12 @@ img, video {
   gap: 2rem;
 }
 
+.space-x-2 > :not([hidden]) ~ :not([hidden]) {
+  --tw-space-x-reverse: 0;
+  margin-right: calc(.5rem * var(--tw-space-x-reverse));
+  margin-left: calc(.5rem * calc(1 - var(--tw-space-x-reverse)));
+}
+
 .space-x-4 > :not([hidden]) ~ :not([hidden]) {
   --tw-space-x-reverse: 0;
   margin-right: calc(1rem * var(--tw-space-x-reverse));
@@ -1688,6 +1698,11 @@ img, video {
   background-color: rgb(55 65 81 / var(--tw-bg-opacity, 1));
 }
 
+.bg-gray-800 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(31 41 55 / var(--tw-bg-opacity, 1));
+}
+
 .bg-gray-900 {
   --tw-bg-opacity: 1;
   background-color: rgb(17 24 39 / var(--tw-bg-opacity, 1));
@@ -1729,11 +1744,6 @@ img, video {
 .bg-zinc-800 {
   --tw-bg-opacity: 1;
   background-color: rgb(39 39 42 / var(--tw-bg-opacity, 1));
-}
-
-.bg-gray-800 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(31 41 55 / var(--tw-bg-opacity, 1));
 }
 
 .bg-opacity-20 {
@@ -1974,6 +1984,10 @@ img, video {
   padding-left: .75rem;
 }
 
+.pr-24 {
+  padding-right: 6rem;
+}
+
 .pr-4 {
   padding-right: 1rem;
 }
@@ -2016,10 +2030,6 @@ img, video {
 
 .pt-\[rem\] {
   padding-top: rem;
-}
-
-.pr-24 {
-  padding-right: 6rem;
 }
 
 .text-center {
@@ -2219,6 +2229,11 @@ img, video {
   color: rgb(17 24 39 / var(--tw-text-opacity, 1));
 }
 
+.text-green-500 {
+  --tw-text-opacity: 1;
+  color: rgb(34 197 94 / var(--tw-text-opacity, 1));
+}
+
 .text-red-500 {
   --tw-text-opacity: 1;
   color: rgb(239 68 68 / var(--tw-text-opacity, 1));
@@ -2246,11 +2261,6 @@ img, video {
 .text-zinc-400 {
   --tw-text-opacity: 1;
   color: rgb(161 161 170 / var(--tw-text-opacity, 1));
-}
-
-.text-green-500 {
-  --tw-text-opacity: 1;
-  color: rgb(34 197 94 / var(--tw-text-opacity, 1));
 }
 
 .underline {
@@ -2853,6 +2863,11 @@ ol[data-list="bullet"] li::marker {
     line-height: 2.25rem;
   }
 
+  .sm\:text-5xl {
+    font-size: 3rem;
+    line-height: 1;
+  }
+
   .sm\:text-base {
     font-size: 1rem;
     line-height: 1.5rem;
@@ -2866,11 +2881,6 @@ ol[data-list="bullet"] li::marker {
   .sm\:text-sm {
     font-size: .875rem;
     line-height: 1.25rem;
-  }
-
-  .sm\:text-5xl {
-    font-size: 3rem;
-    line-height: 1;
   }
 
   .sm\:text-xl {

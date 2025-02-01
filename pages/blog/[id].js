@@ -40,6 +40,7 @@ export async function getStaticProps({ params }) {
 const BlogPosts = ({ seoData, initialBlog }) => {
   const [blog, setBlog] = useState(initialBlog);
 
+
   const { allBlogPosts, blogLoading } = useContext(AuthContext);
 
   const router = useRouter();

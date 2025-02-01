@@ -17,7 +17,7 @@ const Admin = () => {
   const [metaDescription, setMetaDescription] = useState("");
   const [description, setDescription] = useState("");
   const [title, setTitle] = useState("");
-  const [metaKeywords, setMetaKeywords] = useState("");
+  const [metaKeywords, setMetaKeywords] = useState([""]);
   const [category, setCategory] = useState("");
   const [featuredImage, setFeaturedImage] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -52,15 +52,40 @@ const Admin = () => {
   };
 
   useEffect(() => {
-    if (id === undefined) {
-      setTitle("");
-      setCategory("");
-      setDescription("");
-      setMetaKeywords("");
-      setMetaDescription("");
-      setFeaturedImage(null);
+    window.addEventListener("beforeunload", () => {
+      localStorage.removeItem("blogDraft");
+    });
 
-      return;
+    return () => {
+      window.removeEventListener("beforeunload", () => {
+        localStorage.removeItem("blogDraft");
+      });
+    };
+  }, []);
+
+  useEffect(() => {
+    if (id === undefined) {
+      const savedBlog = localStorage.getItem("blogDraft");
+      console.log(JSON.parse(savedBlog));
+
+      if (savedBlog) {
+        const {
+          title,
+          category,
+          description,
+          metaKeywords,
+          metaDescription,
+          featuredImage,
+        } = JSON.parse(savedBlog);
+        setTitle(title);
+        setCategory(category);
+        setDescription(description);
+        setMetaKeywords(metaKeywords);
+        setMetaDescription(metaDescription);
+        setFeaturedImage(featuredImage);
+
+        return;
+      }
     }
 
     if (id) {
@@ -95,16 +120,54 @@ const Admin = () => {
     fileInputRef.current.click();
   };
 
+  const handleAddKeyword = () => {
+    setMetaKeywords([...metaKeywords, ""]);
+  };
+
+  const handleRemoveKeyword = () => {
+    if (metaKeywords.length > 1) {
+      setMetaKeywords(metaKeywords.slice(0, -1));
+    }
+  };
+
+  const handleKeywordChange = (index, value) => {
+    const newKeywords = [...metaKeywords];
+    newKeywords[index] = value;
+    setMetaKeywords(newKeywords);
+  };
+
+  const urlToFile = async (url, filename, mimeType) => {
+    const res = await fetch(url);
+    const buffer = await res.arrayBuffer();
+    return new File([buffer], filename, { type: mimeType });
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     const formData = new FormData();
     formData.append("title", title);
+
     formData.append("category", category);
     formData.append("description", description);
-    formData.append("metaKeywords", metaKeywords);
+
+    metaKeywords.forEach((keyword) => {
+      formData.append(`metaKeywords`, keyword);
+    });
+
     formData.append("metaDescription", metaDescription);
-    formData.append("image", featuredImage);
+
+    if (typeof featuredImage === "string") {
+      const file = await urlToFile(
+        featuredImage,
+        "featuredImage.jpg",
+        "image/jpeg"
+      );
+      formData.append("image", file);
+    } else {
+      formData.append("image", featuredImage);
+    }
+
     try {
       setLoading(true);
       const res = await axios.post(
@@ -119,11 +182,12 @@ const Admin = () => {
       );
 
       if (res.data.success) {
+        localStorage.removeItem("blogDraft");
         setAllBlogPosts((prevBlogs) => [...prevBlogs, res.data.data]);
         setTitle("");
         setCategory("");
         setDescription("");
-        setMetaKeywords("");
+        setMetaKeywords([""]);
         setMetaDescription("");
         setFeaturedImage(null);
         Swal.fire({
@@ -147,6 +211,20 @@ const Admin = () => {
   };
 
   const handlePreview = () => {
+    const blogData = {
+      title,
+      category,
+      description,
+      metaKeywords,
+      metaDescription,
+      featuredImage:
+        featuredImage instanceof File
+          ? URL.createObjectURL(featuredImage)
+          : featuredImage,
+    };
+
+    localStorage.setItem("blogDraft", JSON.stringify(blogData));
+
     router.push({
       pathname: "/preview",
       query: {
@@ -166,7 +244,9 @@ const Admin = () => {
     formData.append("title", title);
     formData.append("category", category);
     formData.append("description", description);
-    formData.append("metaKeywords", metaKeywords);
+    metaKeywords.forEach((keyword) => {
+      formData.append(`metaKeywords`, keyword);
+    });
     formData.append("metaDescription", metaDescription);
     formData.append("image", featuredImage);
 
@@ -190,7 +270,7 @@ const Admin = () => {
         setTitle("");
         setCategory("");
         setDescription("");
-        setMetaKeywords("");
+        setMetaKeywords([""]);
         setMetaDescription("");
         setFeaturedImage(null);
         Swal.fire({
@@ -252,16 +332,34 @@ const Admin = () => {
               >
                 Meta Keywords
               </label>
-              <input
-                type="text"
-                id="metaKeywords"
-                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                placeholder="Enter meta keywords"
-                value={metaKeywords}
-                onChange={(e) => setMetaKeywords(e.target.value)}
-              />
+              {metaKeywords.map((keyword, index) => (
+                <input
+                  key={index}
+                  type="text"
+                  id={`metaKeyword-${index}`}
+                  className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                  placeholder="Enter meta keyword"
+                  value={keyword}
+                  onChange={(e) => handleKeywordChange(index, e.target.value)}
+                />
+              ))}
+              <div className="flex space-x-2 mt-2">
+                <button
+                  type="button"
+                  onClick={handleAddKeyword}
+                  className="rounded-full bg-black text-white p-2.5 text-sm"
+                >
+                  Add One More Keyword
+                </button>
+                <button
+                  type="button"
+                  onClick={handleRemoveKeyword}
+                  className="rounded-full bg-red-500 text-white p-2.5 text-sm"
+                >
+                  Remove Keyword
+                </button>
+              </div>
             </div>
-
             {/* Blog Category */}
             <div>
               <label
@@ -301,9 +399,9 @@ const Admin = () => {
                 {featuredImage ? (
                   <img
                     src={
-                      typeof featuredImage === "string"
-                        ? featuredImage
-                        : URL.createObjectURL(featuredImage)
+                      featuredImage instanceof File
+                        ? URL.createObjectURL(featuredImage)
+                        : featuredImage
                     }
                     alt="Featured"
                     className="h-32"

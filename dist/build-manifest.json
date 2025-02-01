@@ -32,34 +32,6 @@
       "static/chunks/[root of the server]__b40068._.js",
       "static/chunks/pages__error_5771e1._.js",
       "static/chunks/pages__error_30723b._.js"
-    ],
-    "/contactus": [
-      "static/chunks/node_modules_next_e8bd31._.js",
-      "static/chunks/node_modules_react-dom_82bb97._.js",
-      "static/chunks/node_modules_20ea11._.js",
-      "static/chunks/[root of the server]__178287._.js",
-      "static/chunks/node_modules_aos_dist_ba4f50._.js",
-      "static/chunks/pages_contactus_5771e1._.js",
-      "static/chunks/pages_contactus_2c194c._.js"
-    ],
-    "/faqs": [
-      "static/chunks/node_modules_next_a88ed9._.js",
-      "static/chunks/node_modules_react-dom_82bb97._.js",
-      "static/chunks/node_modules_f5bcdd._.js",
-      "static/chunks/[root of the server]__32c59a._.js",
-      "static/chunks/pages_faqs_5771e1._.js",
-      "static/chunks/pages_faqs_8e5227._.js"
-    ],
-    "/blog": [
-      "static/chunks/node_modules_next_ccad02._.js",
-      "static/chunks/node_modules_react-dom_82bb97._.js",
-      "static/chunks/node_modules_react-loader-spinner_dist_module_962164.js",
-      "static/chunks/node_modules_sweetalert2_dist_sweetalert2_all_07b5f9.js",
-      "static/chunks/node_modules_axios_lib_9a6fdf._.js",
-      "static/chunks/node_modules_ca03b7._.js",
-      "static/chunks/[root of the server]__1a561a._.js",
-      "static/chunks/pages_blog_5771e1._.js",
-      "static/chunks/pages_blog_1eddff._.js"
     ]
   },
   "devFiles": [],

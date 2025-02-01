@@ -1319,7 +1319,7 @@ const AuthProvider = ({ children })=>{
     ]);
     const checkToken = async ()=>{
         try {
-            const res = await __TURBOPACK__imported__module__$5b$externals$5d2f$axios__$5b$external$5d$__$28$axios$2c$__esm_import$29$__["default"].post(`${("TURBOPACK compile-time value", "https://instix-backend-v2.vercel.app/")}api/admin/validateToken`, {}, {
+            const res = await __TURBOPACK__imported__module__$5b$externals$5d2f$axios__$5b$external$5d$__$28$axios$2c$__esm_import$29$__["default"].post(`${("TURBOPACK compile-time value", "http://localhost:8080/")}api/admin/validateToken`, {}, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -1413,7 +1413,7 @@ const AuthProvider = ({ children })=>{
         const fetchBlogs = async ()=>{
             try {
                 setBlogLoading(true);
-                const res = await __TURBOPACK__imported__module__$5b$externals$5d2f$axios__$5b$external$5d$__$28$axios$2c$__esm_import$29$__["default"].get(`${("TURBOPACK compile-time value", "https://instix-backend-v2.vercel.app/")}api/admin/blog/getAll`);
+                const res = await __TURBOPACK__imported__module__$5b$externals$5d2f$axios__$5b$external$5d$__$28$axios$2c$__esm_import$29$__["default"].get(`${("TURBOPACK compile-time value", "http://localhost:8080/")}api/admin/blog/getAll`);
                 if (res.data.success) {
                     setAllBlogPosts(res.data.data);
                 }
