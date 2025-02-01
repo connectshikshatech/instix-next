@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
-    "start": "NODE_ENV=production node server.js",
+    "start": "next start",
     "lint": "next lint",
     "postbuild": "next-sitemap",
     "export": "next export"
@@ -35,3 +35,4 @@
     "tailwindcss": "^3.4.1"
   }
 }
+
